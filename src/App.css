@@ -1,0 +1,15 @@
+@import 'tailwindcss';
+
+/*
+ * The Vite starter stylesheet is intentionally kept minimal: every visual rule in
+ * Vault comes from the Tailwind utility layer plus the semantic tokens in
+ * `index.css`. Components must not rely on element selectors defined here.
+ */
+
+:root {
+  color-scheme: light dark;
+}
+
+#root {
+  min-height: 100dvh;
+}
