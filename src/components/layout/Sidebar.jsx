@@ -24,7 +24,7 @@ export default function Sidebar({ links, rails = [], user }) {
           <span className="material-symbols-outlined text-xl">account_balance_wallet</span>
         </span>
         <div className="min-w-0">
-          <p className="truncate text-sm font-semibold text-fg">Vault</p>
+          <p className="truncate text-sm font-semibold text-fg">SpendWise</p>
           <p className="truncate text-xs text-fg-muted">Personal finance OS</p>
         </div>
       </div>

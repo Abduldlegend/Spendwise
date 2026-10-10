@@ -18,7 +18,7 @@ export async function startMockApi() {
     })
     return true
   } catch (error) {
-    console.warn('[vault] MSW failed to start; running without a mock API.', error)
+    console.warn('[SpendWise] MSW failed to start; running without a mock API.', error)
     return false
   }
 }

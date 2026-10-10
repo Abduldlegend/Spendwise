@@ -4,7 +4,7 @@ Guidance for AI coding agents working in this repository. Read this before gener
 
 ## Project
 
-**Vault** — a personal finance and budget dashboard. Frontend-only for now (backend to be added later). Built as a portfolio-grade demonstration of fintech-style frontend architecture, not a tutorial project — prioritize correctness and clean structure over speed.
+**SpendWise** — a personal finance and budget dashboard. Frontend-only for now (backend to be added later). Built as a portfolio-grade demonstration of fintech-style frontend architecture, not a tutorial project — prioritize correctness and clean structure over speed.
 
 Reference docs: `docs/PRD.md` (product requirements), `docs/design-system.md` (visual tokens), if present. Check for these before assuming requirements.
 

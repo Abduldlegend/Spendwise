@@ -1,6 +1,6 @@
-# Product Requirements Document (PRD) & Project Brief: Vault
+# Product Requirements Document (PRD) & Project Brief: SpendWise
 
-**Project Title:** Vault — Bank-Grade Personal Finance & Multi-Rail Budgeting Ledger  
+**Project Title:** SpendWise — Bank-Grade Personal Finance & Multi-Rail Budgeting Ledger  
 **Document Version:** 1.0.0  
 **Status:** Ready for Engineering / Implementation  
 **Target Platform:** Web (Responsive Desktop, Tablet & PWA Mobile)  
@@ -17,7 +17,7 @@ Modern professionals and creators in emerging markets (e.g., Nigeria, Kenya, Gha
 3. **Cluttered or Childish UI:** Most consumer finance apps lack the quiet clarity, density, and institutional trust that high-earning professionals expect.
 
 ### 1.2 The Solution
-**Vault** is an architectural, calm, and trustworthy personal financial ledger designed with the precision of institutional fintech (Mercury, Wise, Ramp). It consolidates multi-currency balances, formal and informal clearing channels, automated envelope-budget caps, and milestone savings into a unified, high-density, responsive web application.
+**SpendWise** is an architectural, calm, and trustworthy personal financial ledger designed with the precision of institutional fintech (Mercury, Wise, Ramp). It consolidates multi-currency balances, formal and informal clearing channels, automated envelope-budget caps, and milestone savings into a unified, high-density, responsive web application.
 
 ---
 
@@ -76,7 +76,7 @@ Modern professionals and creators in emerging markets (e.g., Nigeria, Kenya, Gha
 │• Segmented   │    │• Category     │    │• Warning/Alert│
 │  Spend Chart │    │  Pills        │    │  Envelopes    │
 │• Policy Alert│    │• Inflow vs    │    │• Milestone    │
-│• Recent Sync │    │  Outflow Tabs │    │  Vault Stashes│
+│• Recent Sync │    │  Outflow Tabs │    │  Stash Goals  │
 └──────────────┘    └───────────────┘    └───────────────┘
 ```
 

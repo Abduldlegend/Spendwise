@@ -1,6 +1,6 @@
-# Design System Specification: Vault
+# Design System Specification: SpendWise
 
-**Product Name:** Vault  
+**Product Name:** SpendWise  
 **Product Concept:** Personal finance and multi-rail budget tracking application for emerging market professionals and students (primary benchmark: Nigeria).  
 **Design Personality:** Calm, precise, trustworthy, architectural, bank-grade (Mercury, Wise, Ramp aesthetic).  
 **Core Principles:** 1px hairline structural borders, high-density scannable data grids, tabular monetary alignment, restrained semantic color usage.

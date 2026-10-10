@@ -6,7 +6,7 @@
  * here after a successful mutation.
  */
 
-const PREFIX = 'vault:'
+const PREFIX = 'spendwise:'
 
 /** @param {string} key */
 function fullKey(key) {

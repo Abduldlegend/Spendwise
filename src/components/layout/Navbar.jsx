@@ -51,7 +51,7 @@ export default function Navbar({
             <span className="material-symbols-outlined text-lg">account_balance_wallet</span>
           </span>
           <div className="min-w-0">
-            <p className="truncate text-sm font-semibold text-fg">Vault</p>
+            <p className="truncate text-sm font-semibold text-fg">SpendWise</p>
             {greeting && <p className="truncate text-[11px] font-medium text-fg-muted">{greeting}</p>}
           </div>
         </div>

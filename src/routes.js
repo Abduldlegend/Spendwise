@@ -51,7 +51,7 @@ export const NAV_LINKS = [
 export function getPageMeta(pathname) {
   const link = NAV_LINKS.find((entry) => entry.to === pathname)
   return {
-    title: link?.title ?? 'Vault',
+    title: link?.title ?? 'SpendWise',
     description: link?.description ?? 'Personal finance & liquidity rails',
   }
 }

@@ -1,5 +1,5 @@
 ---
-name: Vault
+name: SpendWise
 colors:
   surface: '#f8f9ff'
   surface-dim: '#cbdbf5'
@@ -195,7 +195,7 @@ The palette is engineered to present financial data with high legibility and una
   - Text Secondary: `#64748B` (Slate-500)
 - **Rich Obsidian Dark Mode:**
   - Base canvas: `#0B121E` (Deep Slate)
-  - Surface cards: `#111A2C` (Deep Vault Tint)
+  - Surface cards: `#111A2C` (Deep Ink Tint)
   - Elevated panels: `#0D1524`, with a `#1E2C44` structural hairline
   - Input / chip surfaces: `#162033`, with a `#27354D` hairline
   - Row hover: `#1A253B`

@@ -97,7 +97,7 @@ export default function AuthPage({ mode }) {
               <Icon name="account_balance_wallet" className="text-xl" />
             </span>
             <div>
-              <p className="text-base font-semibold text-fg">Vault</p>
+              <p className="text-base font-semibold text-fg">SpendWise</p>
               <p className="text-xs text-fg-muted">Personal finance OS</p>
             </div>
           </div>
@@ -226,7 +226,7 @@ export default function AuthPage({ mode }) {
             “One ledger across every rail, with envelopes that tell you the truth before the month closes.”
           </p>
           <footer className="mt-4 text-sm text-fg-muted">
-            Vault · envelope budgeting with a closed loop
+            SpendWise · envelope budgeting with a closed loop
           </footer>
         </blockquote>
       </aside>

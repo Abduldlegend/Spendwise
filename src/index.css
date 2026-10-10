@@ -216,3 +216,15 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Mobile Safari auto-zooms the viewport the moment a form control gets focus
+   if that control's font-size is below 16px — its heuristic for "too small to
+   read". Every field here otherwise inherits Tailwind's `text-sm` (14px), so the
+   page zoomed in as soon as the keyboard opened. Pinning controls to at least
+   16px removes the trigger on every device and screen size. This rule sits
+   outside Tailwind's cascade layers so it deliberately wins over `text-sm`. */
+input,
+select,
+textarea {
+  font-size: max(16px, 1em);
+}

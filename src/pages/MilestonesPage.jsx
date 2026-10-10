@@ -58,7 +58,7 @@ export default function MilestonesPage() {
           <EmptyState
             icon="flag"
             title="No milestones yet"
-            description="Name a goal and Vault will project when you get there."
+            description="Name a goal and SpendWise will project when you get there."
             actionLabel="New milestone"
             onAction={() => setFormOpen(true)}
           />
