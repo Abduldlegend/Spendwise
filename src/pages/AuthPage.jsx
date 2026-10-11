@@ -91,19 +91,19 @@ export default function AuthPage({ mode }) {
   const pending = status === 'pending'
 
   return (
-    <div className="flex min-h-dvh items-center justify-center px-6 py-12">
+    <div className="ledger-grid flex min-h-dvh items-center justify-center bg-surface px-6 py-12">
       <div className="w-full max-w-md">
-        <div className="mb-8 text-center">
-          <div className="flex justify-center">
+        <div className="mb-8 text-center md:text-left">
+          <div className="flex justify-center md:justify-start">
             <BrandMark link={false} size="md" />
           </div>
           <p className="mt-1.5 text-sm text-fg-muted">Personal finance OS</p>
         </div>
 
-        <h1 className="text-center text-3xl font-semibold text-fg">
+        <h1 className="text-center text-3xl font-semibold text-fg md:text-left">
           {isRegister ? 'Create your account' : 'Welcome back'}
         </h1>
-        <p className="mt-2 text-center text-base text-fg-muted">
+        <p className="mt-2 text-center text-base text-fg-muted md:text-left">
           {isRegister
             ? 'Set a base currency and start tracking envelopes.'
             : 'Sign in to pick up where you left off.'}
