@@ -1,14 +1,14 @@
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { budgetSchema } from '../../schemas/budget'
-import { BUDGETABLE_CATEGORIES, CURRENCIES } from '../../schemas/enums'
+import { BUDGETABLE_CATEGORIES } from '../../schemas/enums'
 import { Button } from '../ui/Button'
 
 /**
  * Budget envelope form.
  *
- * Validation lives entirely in `schemas/budget.js`; category and currency options
- * are imported from the schema layer. Owns only local form state.
+ * Validation lives entirely in `schemas/budget.js`; category options are
+ * imported from the schema layer. Owns only local form state. Caps are in Naira.
  *
  * @param {object} props
  * @param {(values: object) => Promise<void>} props.onSubmit
@@ -28,7 +28,6 @@ export default function BudgetGoalForm({ onSubmit, existing, isSubmitting = fals
       ? {
           category: existing.category,
           allocated: existing.allocated,
-          currency: existing.currency,
           cadence: 'monthly',
           isLocked: existing.isLocked,
           policy: existing.policy,
@@ -36,7 +35,6 @@ export default function BudgetGoalForm({ onSubmit, existing, isSubmitting = fals
       : {
           category: 'food',
           allocated: '',
-          currency: 'NGN',
           cadence: 'monthly',
           isLocked: false,
           policy: { autoSweep: { enabled: false, threshold: 0 }, hardLimitPct: 105 },
@@ -65,35 +63,22 @@ export default function BudgetGoalForm({ onSubmit, existing, isSubmitting = fals
         )}
       </label>
 
-      <div className="grid gap-4 sm:grid-cols-2">
-        <label className="flex flex-col gap-1.5">
-          <span className="text-xs font-semibold uppercase tracking-wide text-fg-muted">Monthly cap</span>
-          <input
-            type="number"
-            step="0.01"
-            inputMode="decimal"
-            placeholder="150000"
-            className={inputClass(errors.allocated)}
-            {...register('allocated')}
-          />
-          {errors.allocated && (
-            <span role="alert" className="text-xs font-medium text-negative-fg">
-              {errors.allocated.message}
-            </span>
-          )}
-        </label>
-
-        <label className="flex flex-col gap-1.5">
-          <span className="text-xs font-semibold uppercase tracking-wide text-fg-muted">Currency</span>
-          <select className={inputClass(errors.currency)} {...register('currency')}>
-            {CURRENCIES.map((currency) => (
-              <option key={currency} value={currency}>
-                {currency}
-              </option>
-            ))}
-          </select>
-        </label>
-      </div>
+      <label className="flex flex-col gap-1.5">
+        <span className="text-xs font-semibold uppercase tracking-wide text-fg-muted">Monthly cap (₦)</span>
+        <input
+          type="number"
+          step="0.01"
+          inputMode="decimal"
+          placeholder="150000"
+          className={inputClass(errors.allocated)}
+          {...register('allocated')}
+        />
+        {errors.allocated && (
+          <span role="alert" className="text-xs font-medium text-negative-fg">
+            {errors.allocated.message}
+          </span>
+        )}
+      </label>
 
       <label className="flex items-start gap-3 rounded-lg border border-hairline p-3">
         <input type="checkbox" className="mt-0.5 size-4 accent-brand" {...register('policy.autoSweep.enabled')} />

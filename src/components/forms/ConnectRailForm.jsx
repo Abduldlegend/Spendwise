@@ -1,12 +1,12 @@
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { railSchema } from '../../schemas/milestone'
-import { CURRENCIES, RAIL_KINDS } from '../../schemas/enums'
+import { RAIL_KINDS } from '../../schemas/enums'
 import { Button } from '../ui/Button'
 
 /**
  * Connect-a-rail form. All rules live in `schemas/milestone.js` (`railSchema`);
- * the kind and currency vocabularies are imported from the schema layer.
+ * the kind vocabulary is imported from the schema layer. Rails are Naira-only.
  *
  * @param {object} props
  * @param {(values: object) => Promise<void>} props.onSubmit
@@ -21,7 +21,7 @@ export default function ConnectRailForm({ onSubmit, isSubmitting = false, disabl
     formState: { errors },
   } = useForm({
     resolver: zodResolver(railSchema),
-    defaultValues: { name: '', kind: 'bank', currency: 'NGN', last4: '' },
+    defaultValues: { name: '', kind: 'bank', last4: '' },
   })
 
   const submit = async (values) => {
@@ -57,29 +57,17 @@ export default function ConnectRailForm({ onSubmit, isSubmitting = false, disabl
         </Field>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2">
-        <Field label="Currency" error={errors.currency?.message}>
-          <select disabled={disabled} className={inputClass(errors.currency)} {...register('currency')}>
-            {CURRENCIES.map((currency) => (
-              <option key={currency} value={currency}>
-                {currency}
-              </option>
-            ))}
-          </select>
-        </Field>
-
-        <Field label="Last four digits" error={errors.last4?.message}>
-          <input
-            type="text"
-            inputMode="numeric"
-            maxLength={4}
-            placeholder="0000"
-            disabled={disabled}
-            className={inputClass(errors.last4)}
-            {...register('last4')}
-          />
-        </Field>
-      </div>
+      <Field label="Last four digits" error={errors.last4?.message}>
+        <input
+          type="text"
+          inputMode="numeric"
+          maxLength={4}
+          placeholder="0000"
+          disabled={disabled}
+          className={inputClass(errors.last4)}
+          {...register('last4')}
+        />
+      </Field>
 
       <div className="flex justify-end pt-1">
         <Button variant="primary" type="submit" disabled={disabled || isSubmitting}>

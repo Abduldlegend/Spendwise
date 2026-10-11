@@ -8,7 +8,7 @@ import ConnectRailForm from '../components/forms/ConnectRailForm'
 import { useAuth } from '../context/AuthContext'
 import { useData } from '../context/DataContext'
 import { useTheme } from '../context/ThemeContext'
-import { CURRENCIES, MAX_RAILS, THEMES } from '../schemas/enums'
+import { BASE_CURRENCY, CURRENCY_META, MAX_RAILS, THEMES } from '../schemas/enums'
 import { userSchema } from '../schemas/milestone'
 
 /**
@@ -32,7 +32,6 @@ export default function SettingsPage() {
     values: {
       name: user?.name ?? '',
       email: user?.email ?? '',
-      baseCurrency: user?.baseCurrency ?? 'NGN',
       kycTier: user?.kycTier ?? 1,
       kycLimit: user?.kycLimit ?? 0,
     },
@@ -91,16 +90,12 @@ export default function SettingsPage() {
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2">
-              <label className="flex flex-col gap-1.5">
+              <div className="flex flex-col gap-1.5">
                 <span className="text-xs font-semibold uppercase tracking-wide text-fg-muted">Base currency</span>
-                <select className={inputClass(errors.baseCurrency)} {...register('baseCurrency')}>
-                  {CURRENCIES.map((code) => (
-                    <option key={code} value={code}>
-                      {code}
-                    </option>
-                  ))}
-                </select>
-              </label>
+                <p className="flex h-10 items-center rounded-lg border border-hairline bg-control px-3 text-sm text-fg">
+                  {BASE_CURRENCY} · {CURRENCY_META[BASE_CURRENCY].label}
+                </p>
+              </div>
 
               <label className="flex flex-col gap-1.5">
                 <span className="text-xs font-semibold uppercase tracking-wide text-fg-muted">KYC limit</span>

@@ -10,7 +10,6 @@ import { useTheme } from '../context/ThemeContext'
 import { useData } from '../context/DataContext'
 import { getFirstName, getGreeting } from '../utils/greeting'
 import { getPageMeta, NAV_LINKS } from '../routes'
-import { CURRENCIES } from '../schemas/enums'
 
 /**
  * The authenticated chrome.
@@ -25,7 +24,7 @@ import { CURRENCIES } from '../schemas/enums'
 export default function AuthenticatedLayout() {
   const { user, signOut } = useAuth()
   const { resolvedTheme, toggle } = useTheme()
-  const { rails, currency, addTransaction, updateProfile, policyAlerts } = useData()
+  const { rails, addTransaction, policyAlerts } = useData()
   const navigate = useNavigate()
   const location = useLocation()
 
@@ -38,11 +37,6 @@ export default function AuthenticatedLayout() {
   const handleSignOut = async () => {
     await signOut()
     navigate('/signin', { replace: true })
-  }
-
-  const cycleCurrency = () => {
-    const next = CURRENCIES[(CURRENCIES.indexOf(currency) + 1) % CURRENCIES.length]
-    updateProfile({ baseCurrency: next }).catch(() => undefined)
   }
 
   const handleQuickAdd = async (values) => {
@@ -66,8 +60,6 @@ export default function AuthenticatedLayout() {
           title={meta.title}
           description={meta.description}
           greeting={greeting}
-          currency={currency}
-          onCycleCurrency={cycleCurrency}
           onDeposit={() => setQuickAdd('income')}
           onSpend={() => setQuickAdd('expense')}
           onSignOut={handleSignOut}

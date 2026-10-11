@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { transactionSchema } from '../../schemas/transaction'
-import { BUDGETABLE_CATEGORIES, CURRENCIES } from '../../schemas/enums'
+import { BUDGETABLE_CATEGORIES } from '../../schemas/enums'
 import { Button, Icon } from '../ui/Button'
 
 /**
@@ -9,8 +9,8 @@ import { Button, Icon } from '../ui/Button'
  *
  * Owns only its local input state via React Hook Form; the parent page supplies
  * `onSubmit`. Every validation rule lives in `schemas/transaction.js`, and the
- * category and currency options are imported from the schema layer rather than
- * hard-coded here.
+ * category options are imported from the schema layer rather than hard-coded
+ * here. Amounts are always in Naira.
  *
  * @param {object} props
  * @param {(values: object) => Promise<void>} props.onSubmit
@@ -39,7 +39,6 @@ export default function TransactionForm({
     defaultValues: {
       type: 'expense',
       amount: '',
-      currency: 'NGN',
       category: 'food',
       description: '',
       note: '',
@@ -80,28 +79,16 @@ export default function TransactionForm({
         ))}
       </fieldset>
 
-      <div className="grid gap-4 sm:grid-cols-2">
-        <Field label="Amount" error={errors.amount?.message}>
-          <input
-            type="number"
-            step="0.01"
-            inputMode="decimal"
-            placeholder="0.00"
-            className={inputClass(errors.amount)}
-            {...register('amount')}
-          />
-        </Field>
-
-        <Field label="Currency" error={errors.currency?.message}>
-          <select className={inputClass(errors.currency)} {...register('currency')}>
-            {CURRENCIES.map((currency) => (
-              <option key={currency} value={currency}>
-                {currency}
-              </option>
-            ))}
-          </select>
-        </Field>
-      </div>
+      <Field label="Amount (₦)" error={errors.amount?.message}>
+        <input
+          type="number"
+          step="0.01"
+          inputMode="decimal"
+          placeholder="0.00"
+          className={inputClass(errors.amount)}
+          {...register('amount')}
+        />
+      </Field>
 
       <Field label="Category" error={errors.category?.message}>
         <select className={inputClass(errors.category)} {...register('category')}>

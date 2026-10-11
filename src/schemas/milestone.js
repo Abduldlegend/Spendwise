@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { CURRENCY_SCHEMA } from './enums'
+import { BASE_CURRENCY, CURRENCY_SCHEMA } from './enums'
 
 /** Milestone savings stash. */
 export const milestoneSchema = z.object({
@@ -34,7 +34,7 @@ export const milestoneRecordSchema = milestoneSchema.extend({
 export const railSchema = z.object({
   name: z.string().trim().min(2, 'Name the rail').max(48),
   kind: z.enum(['bank', 'digital', 'international', 'cash']),
-  currency: CURRENCY_SCHEMA,
+  currency: CURRENCY_SCHEMA.default(BASE_CURRENCY),
   last4: z.preprocess(
     // The form submits an empty string when the field is left blank; treat that
     // as "no last4" rather than a regex failure.
@@ -57,7 +57,7 @@ export const railRecordSchema = railSchema.extend({
 export const userSchema = z.object({
   name: z.string().trim().min(2, 'Enter your full name').max(60),
   email: z.email('Enter a valid email'),
-  baseCurrency: CURRENCY_SCHEMA,
+  baseCurrency: CURRENCY_SCHEMA.default(BASE_CURRENCY),
   kycTier: z.coerce.number().int().min(1).max(3).default(1),
   kycLimit: z.coerce.number().min(0).default(5_000_000),
 })

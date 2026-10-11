@@ -1,7 +1,6 @@
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { milestoneSchema } from '../../schemas/milestone'
-import { CURRENCIES } from '../../schemas/enums'
 import { Button } from '../ui/Button'
 
 /**
@@ -25,10 +24,9 @@ export default function MilestoneForm({ onSubmit, existing, isSubmitting = false
           title: existing.title,
           targetAmount: existing.targetAmount,
           savedAmount: existing.savedAmount,
-          currency: existing.currency,
           cadence: existing.cadence,
         }
-      : { title: '', targetAmount: '', savedAmount: 0, currency: 'NGN', cadence: 0 },
+      : { title: '', targetAmount: '', savedAmount: 0, cadence: 0 },
   })
 
   return (
@@ -72,28 +70,16 @@ export default function MilestoneForm({ onSubmit, existing, isSubmitting = false
         </Field>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2">
-        <Field label="Monthly contribution" error={errors.cadence?.message}>
-          <input
-            type="number"
-            step="0.01"
-            inputMode="decimal"
-            placeholder="350000"
-            className={inputClass(errors.cadence)}
-            {...register('cadence')}
-          />
-        </Field>
-
-        <Field label="Currency" error={errors.currency?.message}>
-          <select className={inputClass(errors.currency)} {...register('currency')}>
-            {CURRENCIES.map((currency) => (
-              <option key={currency} value={currency}>
-                {currency}
-              </option>
-            ))}
-          </select>
-        </Field>
-      </div>
+      <Field label="Monthly contribution (₦)" error={errors.cadence?.message}>
+        <input
+          type="number"
+          step="0.01"
+          inputMode="decimal"
+          placeholder="350000"
+          className={inputClass(errors.cadence)}
+          {...register('cadence')}
+        />
+      </Field>
 
       <div className="flex justify-end gap-2 pt-1">
         {onCancel && (

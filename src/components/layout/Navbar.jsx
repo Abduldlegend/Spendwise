@@ -1,12 +1,10 @@
-import { CURRENCIES, CURRENCY_META } from '../../schemas/enums'
-
 /**
  * Top bar, matching the reference system header.
  *
  * Desktop shows the active screen's title and description; on mobile it collapses
- * to the brand plus a time-of-day greeting. The right cluster holds the currency
- * switcher, the quick Deposit / Spend actions and the account controls; section
- * navigation lives in `BottomNav` below `lg` and in the sidebar from `lg` up.
+ * to the brand plus a time-of-day greeting. The right cluster holds the quick
+ * Deposit / Spend actions and the account controls; section navigation lives in
+ * `BottomNav` below `lg` and in the sidebar from `lg` up.
  *
  * Icon controls are sized to stay on one line down to the smallest phone.
  *
@@ -16,8 +14,6 @@ import { CURRENCIES, CURRENCY_META } from '../../schemas/enums'
  * @param {string} props.title
  * @param {string} [props.description]
  * @param {string} [props.greeting] e.g. "Good morning, Dami" (mobile only)
- * @param {string} [props.currency]
- * @param {() => void} [props.onCycleCurrency]
  * @param {() => void} [props.onDeposit]
  * @param {() => void} [props.onSpend]
  * @param {() => void} [props.onSignOut]
@@ -30,8 +26,6 @@ export default function Navbar({
   title,
   description,
   greeting,
-  currency,
-  onCycleCurrency,
   onDeposit,
   onSpend,
   onSignOut,
@@ -63,29 +57,6 @@ export default function Navbar({
       </div>
 
       <div className="ml-auto flex items-center gap-1.5 sm:gap-3">
-        {currency && onCycleCurrency && (
-          <button
-            type="button"
-            onClick={onCycleCurrency}
-            title="Switch display currency"
-            aria-label={`Display currency: ${currency}. Activate to cycle.`}
-            className="hidden items-center gap-1.5 rounded-lg border border-hairline bg-control px-2.5 py-1.5 text-xs font-medium text-fg-muted transition-colors hover:bg-hover sm:flex"
-          >
-            {CURRENCIES.map((code) => (
-              <span key={code} className="flex items-center gap-1.5">
-                <span className={code === currency ? 'font-bold text-brand-fg' : 'text-fg-subtle'}>
-                  {CURRENCY_META[code].symbol} {code}
-                </span>
-                {code !== CURRENCIES[CURRENCIES.length - 1] && (
-                  <span aria-hidden="true" className="text-hairline-strong">
-                    |
-                  </span>
-                )}
-              </span>
-            ))}
-          </button>
-        )}
-
         {(onDeposit || onSpend) && (
           <div className="flex items-center gap-1.5 sm:gap-2">
             {onDeposit && (

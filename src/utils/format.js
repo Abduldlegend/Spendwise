@@ -8,11 +8,7 @@
 
 const SYMBOLS = {
   NGN: '₦',
-  USD: '$',
-  GBP: '£',
 }
-
-const SYMBOL_ORDER = ['$', '₦', '£']
 
 function groupThousands(intPart) {
   return intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
@@ -99,14 +95,4 @@ export function formatCompact(value, currency = 'NGN') {
  */
 function trimZeros(text) {
   return text.includes('.') ? text.replace(/\.?0+$/, '') : text
-}
-
-/** @param {string} currency */
-export function currencySymbol(currency) {
-  return SYMBOLS[currency] ?? ''
-}
-
-/** @returns {string[]} every symbol the app can render, most-specific first */
-export function allSymbols() {
-  return [...SYMBOL_ORDER]
 }

@@ -81,13 +81,14 @@ describe('account store', () => {
 
   it('updates profile fields while preserving identity and credentials', async () => {
     const account = await createAccount({ name: 'Ada', email: 'ada@example.com', password: 'supersecret' })
-    const updated = updateAccountProfile(account.id, { baseCurrency: 'USD', name: 'Ada Lovelace' })
+    const updated = updateAccountProfile(account.id, { name: 'Ada Lovelace', kycTier: 2 })
 
-    expect(updated.baseCurrency).toBe('USD')
     expect(updated.name).toBe('Ada Lovelace')
+    expect(updated.kycTier).toBe(2)
+    expect(updated.baseCurrency).toBe('NGN')
     expect(updated.email).toBe('ada@example.com')
     expect(updated.passwordHash).toBe(account.passwordHash)
-    expect(findById(account.id).baseCurrency).toBe('USD')
+    expect(findById(account.id).name).toBe('Ada Lovelace')
     await expect(verifyCredentials('ada@example.com', 'supersecret')).resolves.toMatchObject({ id: account.id })
   })
 })

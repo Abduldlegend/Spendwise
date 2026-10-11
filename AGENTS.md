@@ -66,7 +66,7 @@ Global state shape (see `docs/PRD.md` §9.2 for full rationale):
 {
 transactions: Transaction[],
 budgets: Budget[],
-user: { name, currency, theme },
+user: { name, baseCurrency, theme },
 ui: { isLoading, error }
 }
 

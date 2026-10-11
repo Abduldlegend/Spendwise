@@ -213,7 +213,7 @@ Dark mode is **not** implemented by overriding raw palette classes (e.g. `.dark 
 Typography prioritizes density, geometric cohesion, and data alignment.
 
 - **Interface Primary (`Geist`):** Delivers clean optical kerning, neutral proportions, and high readability in both narrative text and tight data matrices. All body text leverages tabular lining figures (`font-variant-numeric: tabular-nums`) by default.
-- **Financial Ledger & Data (`Geist Mono`):** Applied to monetary figures, exchange rates, account identifiers, transaction hashes, timestamps, and compact status badges. Fixed widths ensure vertical alignment across dense tables and transaction streams. Every numeric style resolves to `font-family: 'Geist Mono', monospace` with `font-variant-numeric: tabular-nums lining-nums`.
+- **Financial Ledger & Data (`Geist Mono`):** Applied to monetary figures, account identifiers, transaction hashes, timestamps, and compact status badges. Fixed widths ensure vertical alignment across dense tables and transaction streams. Every numeric style resolves to `font-family: 'Geist Mono', monospace` with `font-variant-numeric: tabular-nums lining-nums`.
 - **Hierarchical Discipline:** Display styles are kept sharp and tight. All labels under 14px default to monospaced uppercase tracking for rapid optical parsing.
 - **Iconography:** **Material Symbols Outlined** (variable font, `FILL 0`/`1` axis) — not Lucide. Navigation and status icons use `FILL 1` when active, `FILL 0` when idle. Loaded as a webfont; no icon package is installed.
 

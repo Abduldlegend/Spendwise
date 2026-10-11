@@ -37,9 +37,8 @@ describe('formatCurrency', () => {
     expect(formatCurrency(1250000, 'NGN')).toBe('₦1,250,000.00')
   })
 
-  it('supports USD and GBP', () => {
-    expect(formatCurrency(1500, 'USD')).toBe('$1,500.00')
-    expect(formatCurrency(1500, 'GBP')).toBe('£1,500.00')
+  it('defaults to Naira when no currency is supplied', () => {
+    expect(formatCurrency(1500)).toBe('₦1,500.00')
   })
 
   it('falls back to the code for an unknown currency', () => {

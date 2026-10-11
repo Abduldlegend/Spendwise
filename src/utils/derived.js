@@ -6,7 +6,6 @@
  * must be no `balance` field on any entity.
  */
 
-import { CURRENCY_META } from '../schemas/enums'
 import {
   cycleKey,
   cycleKeyToDate,
@@ -25,21 +24,6 @@ export const BUDGET_THRESHOLDS = {
   locked: 1,
 }
 
-/**
- * @param {number} amount
- * @param {string} from ISO code
- * @param {string} to ISO code
- * @returns {number} converted amount, rounded to cents
- */
-export function convertAmount(amount, from, to) {
-  if (!Number.isFinite(amount)) return 0
-  if (from === to) return round2(amount)
-  const fromRate = CURRENCY_META[from]?.rate
-  const toRate = CURRENCY_META[to]?.rate
-  if (!fromRate || !toRate) return round2(amount)
-  return round2((amount * fromRate) / toRate)
-}
-
 /** @param {number} value */
 export function round2(value) {
   return Math.round((value + Number.EPSILON) * 100) / 100
@@ -50,24 +34,19 @@ export function round2(value) {
  * sign of `amount` — amounts are always stored positive.
  * @param {{ type: string, amount: number }} transaction
  */
-export function signedAmount(transaction, targetCurrency) {
-  const base = convertAmount(
-    transaction.amount,
-    transaction.currency,
-    targetCurrency,
-  )
-  return transaction.type === 'income' ? base : -base
+export function signedAmount(transaction) {
+  const amount = round2(transaction.amount)
+  return transaction.type === 'income' ? amount : -amount
 }
 
 /**
- * Net liquid balance across every rail, converted to one currency.
+ * Net liquid balance across every rail.
  * @param {Array<object>} transactions
- * @param {string} currency
  * @returns {number}
  */
-export function getBalance(transactions = [], currency = 'NGN') {
+export function getBalance(transactions = []) {
   return round2(
-    transactions.reduce((total, tx) => total + signedAmount(tx, currency), 0),
+    transactions.reduce((total, tx) => total + signedAmount(tx), 0),
   )
 }
 
@@ -76,12 +55,11 @@ export function getBalance(transactions = [], currency = 'NGN') {
  * @param {Array<object>} transactions
  * @param {object} [options]
  * @param {string} [options.cycle] cycle key; defaults to the current cycle
- * @param {string} [options.currency]
  * @returns {{ inflow: number, spend: number, net: number,
  *   priorInflow: number, priorSpend: number,
  *   inflowDelta: number|null, spendDelta: number|null }}
  */
-export function getFlowTotals(transactions = [], { cycle, currency = 'NGN' } = {}) {
+export function getFlowTotals(transactions = [], { cycle } = {}) {
   const targetCycle = cycle ?? cycleKey()
   const priorCycle = previousCycleKey(targetCycle)
 
@@ -93,11 +71,11 @@ export function getFlowTotals(transactions = [], { cycle, currency = 'NGN' } = {
   for (const tx of transactions) {
     const key = cycleKey(tx.occurredAt)
     if (key === targetCycle) {
-      const value = signedAmount(tx, currency)
+      const value = signedAmount(tx)
       if (value >= 0) inflow += value
       else spend += -value
     } else if (key === priorCycle) {
-      const value = signedAmount(tx, currency)
+      const value = signedAmount(tx)
       if (value >= 0) priorInflow += value
       else priorSpend += -value
     }
@@ -127,17 +105,14 @@ function ratioDelta(current, prior) {
  * Spend per category for a cycle.
  * @returns {Record<string, number>} only non-zero categories are included
  */
-export function getCategoryTotals(
-  transactions = [],
-  { cycle, currency = 'NGN' } = {},
-) {
+export function getCategoryTotals(transactions = [], { cycle } = {}) {
   const targetCycle = cycle ?? cycleKey()
   const totals = {}
 
   for (const tx of transactions) {
     if (cycleKey(tx.occurredAt) !== targetCycle) continue
     if (tx.type !== 'expense') continue
-    const value = convertAmount(tx.amount, tx.currency, currency)
+    const value = round2(tx.amount)
     totals[tx.category] = round2((totals[tx.category] ?? 0) + value)
   }
 
@@ -150,9 +125,9 @@ export function getCategoryTotals(
  */
 export function getCategoryBreakdown(
   transactions = [],
-  { cycle, currency = 'NGN', categories } = {},
+  { cycle, categories } = {},
 ) {
-  const totals = getCategoryTotals(transactions, { cycle, currency })
+  const totals = getCategoryTotals(transactions, { cycle })
   const ordered = categories
     ? categories.map((category) => ({ category, amount: totals[category] ?? 0 }))
     : Object.entries(totals)

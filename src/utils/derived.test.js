@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest'
 import {
-  convertAmount,
   getBalance,
   getBudgetProgress,
   getBurnRate,
@@ -41,38 +40,10 @@ describe('round2', () => {
   })
 })
 
-describe('convertAmount', () => {
-  it('is a no-op for the same currency', () => {
-    expect(convertAmount(100, 'NGN', 'NGN')).toBe(100)
-  })
-
-  it('converts USD to NGN at the seeded rate', () => {
-    expect(convertAmount(100, 'USD', 'NGN')).toBe(154025)
-  })
-
-  it('converts NGN back down to USD', () => {
-    expect(convertAmount(154025, 'NGN', 'USD')).toBe(100)
-  })
-
-  it('handles GBP', () => {
-    expect(convertAmount(1, 'GBP', 'NGN')).toBe(1950.4)
-  })
-
-  it('returns 0 for non-finite input', () => {
-    expect(convertAmount(NaN, 'USD', 'NGN')).toBe(0)
-  })
-})
-
 describe('signedAmount', () => {
   it('derives sign from type, not from the amount', () => {
     expect(signedAmount(tx({ type: 'expense', amount: 500 }))).toBe(-500)
     expect(signedAmount(tx({ type: 'income', amount: 500 }))).toBe(500)
-  })
-
-  it('converts into the target currency first', () => {
-    expect(signedAmount(tx({ type: 'expense', amount: 100, currency: 'USD' }), 'NGN')).toBe(
-      -154025,
-    )
   })
 })
 
@@ -91,14 +62,6 @@ describe('getBalance', () => {
       tx({ id: 'b', type: 'expense', amount: 2000 }),
     ])
     expect(result).toBe(3000)
-  })
-
-  it('aggregates across mixed currencies', () => {
-    const result = getBalance([
-      tx({ id: 'a', type: 'income', amount: 1000, currency: 'NGN' }),
-      tx({ id: 'b', type: 'income', amount: 100, currency: 'USD' }),
-    ])
-    expect(result).toBe(155025)
   })
 })
 
@@ -175,14 +138,6 @@ describe('getCategoryTotals', () => {
       { cycle: '202609' },
     )
     expect(result).toEqual({})
-  })
-
-  it('normalises foreign-currency spend', () => {
-    const result = getCategoryTotals(
-      [tx({ amount: 100, currency: 'USD', category: 'tech' })],
-      { cycle: '202609', currency: 'NGN' },
-    )
-    expect(result.tech).toBe(154025)
   })
 })
 

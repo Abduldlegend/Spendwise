@@ -84,7 +84,7 @@
    - 2x2 grid for metric cards.
    - Stacked single-column main content.
 3. **Mobile (< 768px):**
-   - Persistent top app bar (KYC avatar, currency selector, theme toggle, notifications).
+   - Persistent top app bar (KYC avatar, base currency badge, theme toggle, notifications).
    - Single-column scrolling stream.
    - Fixed docked bottom navigation bar (`BottomNavBar`: Overview, Transactions, Budgets, Settings) with safe-area padding.
 
@@ -125,8 +125,8 @@
   - Leisure & Personal: Soft Lavender (`#94A3B8`)
 
 ### 5.5 Currency & Multi-Rail Formatting
-- Primary Currency: **Nigerian Naira (`₦`)** formatted as `₦1,250,000.00`.
-- Secondary Selectors: **USD (`$`)**, **GBP (`£`)**.
+- Single base currency: **Nigerian Naira (`₦`)** formatted as `₦1,250,000.00`.
+- No currency selection or conversion; every figure renders in NGN.
 - Monospaced tabular spacing across all decimal places.
 
 ### 5.2 Module 1: Overview & Dashboard

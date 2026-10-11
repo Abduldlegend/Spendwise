@@ -4,7 +4,7 @@
 **Document Version:** 1.0.0  
 **Status:** Ready for Engineering / Implementation  
 **Target Platform:** Web (Responsive Desktop, Tablet & PWA Mobile)  
-**Primary Demographic / Market:** Young professionals, tech freelancers, founders, and students in emerging markets (Primary benchmark: Nigeria / Pan-Africa with multi-currency & multi-rail cashflow).
+**Primary Demographic / Market:** Young professionals, tech freelancers, founders, and students in emerging markets (Primary benchmark: Nigeria / Pan-Africa with multi-rail cashflow settled in a single Naira ledger).
 
 ---
 
@@ -12,12 +12,12 @@
 
 ### 1.1 The Challenge
 Modern professionals and creators in emerging markets (e.g., Nigeria, Kenya, Ghana) navigate fragmented financial realities:
-1. **Multi-Rail Inflows:** Income originates from local bank clearing networks (NIBSS, GTBank, Zenith), digital banks/fintechs (Kuda, Cowrywise), and international gig/SaaS platforms (Upwork, Deel, Stripe, PayPal) across NGN, USD, and GBP.
-2. **Volatile Currency & Informal Channels:** Inflationary environments make strict monthly envelope budgeting crucial, yet existing tools either cater exclusively to US/EU banking rails (Plaid-dependent) or lack double-entry financial rigor.
+1. **Multi-Rail Inflows:** Income originates from local bank clearing networks (NIBSS, GTBank, Zenith), digital banks/fintechs (Kuda, Cowrywise), and international gig/SaaS platforms (Upwork, Deel, Stripe, PayPal), all settling into a single Naira (NGN) ledger.
+2. **Volatile Naira & Informal Channels:** Inflationary environments make strict monthly envelope budgeting crucial, yet existing tools either cater exclusively to US/EU banking rails (Plaid-dependent) or lack double-entry financial rigor.
 3. **Cluttered or Childish UI:** Most consumer finance apps lack the quiet clarity, density, and institutional trust that high-earning professionals expect.
 
 ### 1.2 The Solution
-**SpendWise** is an architectural, calm, and trustworthy personal financial ledger designed with the precision of institutional fintech (Mercury, Wise, Ramp). It consolidates multi-currency balances, formal and informal clearing channels, automated envelope-budget caps, and milestone savings into a unified, high-density, responsive web application.
+**SpendWise** is an architectural, calm, and trustworthy personal financial ledger designed with the precision of institutional fintech (Mercury, Wise, Ramp). It consolidates balances across rails, formal and informal clearing channels, automated envelope-budget caps, and milestone savings into a unified, high-density, responsive web application.
 
 ---
 
@@ -25,7 +25,7 @@ Modern professionals and creators in emerging markets (e.g., Nigeria, Kenya, Gha
 
 ### Persona A: Damilola Adebayo (The Multi-Earner Tech Freelancer)
 - **Role:** Senior Product Designer & Remote Contractor.
-- **Financial Profile:** Receives direct foreign currency deposits via Upwork/Deel and local consulting fees via Zenith and GTBank. Total monthly inflow: ~₦1,250,000–₦2,000,000.
+- **Financial Profile:** Receives foreign gig deposits (Upwork/Deel) and local consulting fees (Zenith, GTBank), all tracked in Naira (NGN). Total monthly inflow: ~₦1,250,000–₦2,000,000.
 - **Core Pain Point:** Needs real-time tracking across accounts without manual spreadsheet formulas, plus strict alerts when discretionary food/entertainment spending breaches 85% of monthly envelopes.
 
 ### Persona B: Chioma Okonjo (The Growth-Stage Startup Operator)
@@ -60,7 +60,7 @@ Modern professionals and creators in emerging markets (e.g., Nigeria, Kenya, Gha
                                 ▼
 ┌─────────────────────────────────────────────────────────────────┐
 │                   Unified Application Shell                     │
-│  - Top Header: Base Currency Switcher (NGN/USD/GBP),            │
+│  - Top Header: Base Currency Badge (₦ NGN),                    │
 │                Dark/Light Theme Toggle, Notifications           │
 │  - Desktop Rail / Mobile BottomNav: Overview, Activity, Budgets, │
 │                Settings, Quick Inflow/Spend Actions             │
@@ -91,8 +91,8 @@ Modern professionals and creators in emerging markets (e.g., Nigeria, Kenya, Gha
   - Operational Reassurance Widget: Live status of connected bank rails (Zenith, GTBank, Kuda) with latency indicators and ISO-27001/NDPR compliance indicators.
 - **Register & Onboarding Screen:**
   - Full Name, Work Email, Master Password with live AES-256 cipher checklist (8+ chars, uppercase, symbol/number).
-  - Primary Base Currency selector (`NGN ₦`, `USD $`, `GBP £`) for FX settlement.
-  - Instant Tier 1 KYC verification boundary (₦5,000,000 / $5,000 limit).
+  - Base currency is fixed to Nigerian Naira (`NGN ₦`); no currency selection is required.
+  - Instant Tier 1 KYC verification boundary (₦5,000,000 limit).
 
 ### 5.2 Module 1: Overview & Dashboard
 - **Consolidated 4-Metric Grid:**
@@ -158,6 +158,6 @@ Modern professionals and creators in emerging markets (e.g., Nigeria, Kenya, Gha
    - Seamless interactive prototype unifying Desktop, Tablet, and Mobile shells with Dark Mode toggling and Auth views.
 3. **Milestone 3 — Backend API & Bank Rail Sync (Upcoming Phase):**
    - Webhook ingress for automated transaction parsing (Open Banking / Mono / Stitch / Plaid APIs).
-   - Local storage encryption and automated currency conversion cache.
+   - Local storage encryption for offline ledger data.
 4. **Milestone 4 — Production Launch & PWA Packaging (Upcoming Phase):**
    - Deployment to Vercel/Netlify with offline PWA support for mobile users.

@@ -20,7 +20,6 @@ describe('ConnectRailForm', () => {
 
     await userEvent.type(screen.getByLabelText(/rail name/i), 'GTBank')
     await userEvent.selectOptions(screen.getByLabelText(/kind/i), 'bank')
-    await userEvent.selectOptions(screen.getByLabelText(/currency/i), 'NGN')
     await userEvent.type(screen.getByLabelText(/last four/i), '4196')
     await userEvent.click(screen.getByRole('button', { name: /connect rail/i }))
 

@@ -9,7 +9,7 @@ import {
 import { budgetRecordSchema, budgetSchema } from '../schemas/budget'
 import { milestoneRecordSchema, milestoneSchema, railRecordSchema, railSchema } from '../schemas/milestone'
 import { toTransactionRecord, transactionSchema } from '../schemas/transaction'
-import { MAX_RAILS } from '../schemas/enums'
+import { BASE_CURRENCY, MAX_RAILS } from '../schemas/enums'
 import * as api from '../services/api'
 import {
   getBalance,
@@ -410,20 +410,20 @@ export function DataProvider({ children }) {
   // ------------------------------------------------------------------ derived
 
   const cycle = cycleKey()
-  const currency = user?.baseCurrency ?? 'NGN'
+  const currency = BASE_CURRENCY
 
-  const balance = useMemo(() => getBalance(state.transactions, currency), [state.transactions, currency])
+  const balance = useMemo(() => getBalance(state.transactions), [state.transactions])
   const flow = useMemo(
-    () => getFlowTotals(state.transactions, { cycle, currency }),
-    [state.transactions, cycle, currency],
+    () => getFlowTotals(state.transactions, { cycle }),
+    [state.transactions, cycle],
   )
   const categoryTotals = useMemo(
-    () => getCategoryTotals(state.transactions, { cycle, currency }),
-    [state.transactions, cycle, currency],
+    () => getCategoryTotals(state.transactions, { cycle }),
+    [state.transactions, cycle],
   )
   const categoryBreakdown = useMemo(
-    () => getCategoryBreakdown(state.transactions, { cycle, currency }),
-    [state.transactions, cycle, currency],
+    () => getCategoryBreakdown(state.transactions, { cycle }),
+    [state.transactions, cycle],
   )
   const budgetViews = useMemo(
     () =>

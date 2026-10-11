@@ -96,7 +96,6 @@ describe('TransactionForm', () => {
       defaultValues: {
         type: 'expense',
         amount: 1500,
-        currency: 'USD',
         category: 'tech',
         description: 'GitHub seat',
         note: '',

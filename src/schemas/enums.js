@@ -10,12 +10,14 @@ import { z } from 'zod'
  * from this one list.
  */
 
-export const CURRENCIES = ['NGN', 'USD', 'GBP']
+/**
+ * The single currency the ledger operates in. The app is Naira-only: there is no
+ * currency switching and no cross-currency conversion.
+ */
+export const BASE_CURRENCY = 'NGN'
 
 export const CURRENCY_META = {
-  NGN: { code: 'NGN', symbol: '₦', label: 'Nigerian Naira', rate: 1 },
-  USD: { code: 'USD', symbol: '$', label: 'US Dollar', rate: 1540.25 },
-  GBP: { code: 'GBP', symbol: '£', label: 'Pound Sterling', rate: 1950.4 },
+  NGN: { code: 'NGN', symbol: '₦', label: 'Nigerian Naira' },
 }
 
 /**
@@ -53,7 +55,7 @@ export const THEMES = ['system', 'light', 'dark']
 
 export const KYC_TIERS = [1, 2, 3]
 
-export const CURRENCY_SCHEMA = z.enum(CURRENCIES)
+export const CURRENCY_SCHEMA = z.literal(BASE_CURRENCY)
 export const CATEGORY_SCHEMA = z.enum(CATEGORIES)
 export const TRANSACTION_TYPE_SCHEMA = z.enum(TRANSACTION_TYPES)
 export const RAIL_KIND_SCHEMA = z.enum(RAIL_KINDS)
