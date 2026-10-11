@@ -1,4 +1,5 @@
 import { NavLink } from 'react-router-dom'
+import BrandMark from '../ui/BrandMark'
 
 /**
  * Desktop navigation rail.
@@ -19,14 +20,9 @@ import { NavLink } from 'react-router-dom'
 export default function Sidebar({ links, rails = [], user }) {
   return (
     <aside className="sticky top-0 hidden h-dvh w-64 shrink-0 flex-col gap-6 border-r border-hairline bg-card px-4 py-6 lg:flex">
-      <div className="flex items-center gap-2.5 px-2">
-        <span aria-hidden="true" className="grid size-9 place-items-center rounded-xl bg-brand text-fg-on-brand">
-          <span className="material-symbols-outlined text-xl">account_balance_wallet</span>
-        </span>
-        <div className="min-w-0">
-          <p className="truncate text-sm font-semibold text-fg">SpendWise</p>
-          <p className="truncate text-xs text-fg-muted">Personal finance OS</p>
-        </div>
+      <div className="px-2">
+        <BrandMark to="/dashboard" />
+        <p className="mt-1.5 truncate text-xs text-fg-muted">Personal finance OS</p>
       </div>
 
       <nav className="flex-1" aria-label="Main">

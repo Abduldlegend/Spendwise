@@ -98,31 +98,31 @@ typography:
     lineHeight: 16px
     letterSpacing: 0.01em
   numeric-xl:
-    fontFamily: Geist Mono
+    fontFamily: JetBrains Mono
     fontSize: 32px
     fontWeight: '600'
     lineHeight: 38px
     letterSpacing: -0.03em
   numeric-lg:
-    fontFamily: Geist Mono
+    fontFamily: JetBrains Mono
     fontSize: 20px
     fontWeight: '500'
     lineHeight: 26px
     letterSpacing: -0.02em
   numeric-md:
-    fontFamily: Geist Mono
+    fontFamily: JetBrains Mono
     fontSize: 14px
     fontWeight: '500'
     lineHeight: 20px
     letterSpacing: -0.01em
   label-md:
-    fontFamily: Geist Mono
+    fontFamily: JetBrains Mono
     fontSize: 12px
     fontWeight: '500'
     lineHeight: 16px
     letterSpacing: 0.04em
   label-sm:
-    fontFamily: Geist Mono
+    fontFamily: JetBrains Mono
     fontSize: 10px
     fontWeight: '600'
     lineHeight: 14px
@@ -164,6 +164,11 @@ colors, typography, spacing, borders, radius, and other design-system rules.
 > desktop breakpoint — and in every case the export agreed with `docs/PRD.md`
 > and `docs/design_system.md` rather than with the prose. `ref/` is read-only
 > reference material and is never modified.
+>
+> **Typeface update (landing page).** The financial/label typeface was switched
+> from `Geist Mono` to **`JetBrains Mono`** so the app matches the public landing
+> page (`ref/landing.html`), which specifies `JetBrains Mono` for all labels and
+> numerals. `Geist` remains the interface sans-serif.
 
 
 ## Brand & Style
@@ -213,7 +218,7 @@ Dark mode is **not** implemented by overriding raw palette classes (e.g. `.dark 
 Typography prioritizes density, geometric cohesion, and data alignment.
 
 - **Interface Primary (`Geist`):** Delivers clean optical kerning, neutral proportions, and high readability in both narrative text and tight data matrices. All body text leverages tabular lining figures (`font-variant-numeric: tabular-nums`) by default.
-- **Financial Ledger & Data (`Geist Mono`):** Applied to monetary figures, account identifiers, transaction hashes, timestamps, and compact status badges. Fixed widths ensure vertical alignment across dense tables and transaction streams. Every numeric style resolves to `font-family: 'Geist Mono', monospace` with `font-variant-numeric: tabular-nums lining-nums`.
+- **Financial Ledger & Data (`JetBrains Mono`):** Applied to monetary figures, account identifiers, transaction hashes, timestamps, and compact status badges. Fixed widths ensure vertical alignment across dense tables and transaction streams. Every numeric style resolves to `font-family: 'JetBrains Mono', monospace` with `font-variant-numeric: tabular-nums lining-nums`.
 - **Hierarchical Discipline:** Display styles are kept sharp and tight. All labels under 14px default to monospaced uppercase tracking for rapid optical parsing.
 - **Iconography:** **Material Symbols Outlined** (variable font, `FILL 0`/`1` axis) — not Lucide. Navigation and status icons use `FILL 1` when active, `FILL 0` when idle. Loaded as a webfont; no icon package is installed.
 

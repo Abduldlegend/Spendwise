@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import BudgetProgressBar from './BudgetProgressBar'
 import CategoryBadge from './CategoryBadge'
+import ConfirmDialog from './ConfirmDialog'
 import MetricCard from './MetricCard'
 import SpendingDistributionBar from './SpendingDistributionBar'
 import TransactionTable from './TransactionTable'
@@ -176,5 +177,34 @@ describe('TransactionTable', () => {
   it('handles an empty ledger', () => {
     render(<TransactionTable rows={[]} />)
     expect(screen.getAllByRole('row')).toHaveLength(1)
+  })
+})
+
+describe('ConfirmDialog', () => {
+  it('renders nothing while closed', () => {
+    render(<ConfirmDialog open={false} title="Sign out?" onConfirm={vi.fn()} onCancel={vi.fn()} />)
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+  })
+
+  it('invokes the confirm and cancel handlers', async () => {
+    const onConfirm = vi.fn()
+    const onCancel = vi.fn()
+    render(
+      <ConfirmDialog
+        open
+        title="Sign out?"
+        description="You'll need to sign in again."
+        confirmLabel="Sign out"
+        onConfirm={onConfirm}
+        onCancel={onCancel}
+      />,
+    )
+
+    expect(screen.getByRole('dialog')).toHaveAccessibleName('Sign out?')
+    await userEvent.click(screen.getByRole('button', { name: 'Sign out' }))
+    expect(onConfirm).toHaveBeenCalledTimes(1)
+
+    await userEvent.click(screen.getByRole('button', { name: 'Cancel' }))
+    expect(onCancel).toHaveBeenCalledTimes(1)
   })
 })

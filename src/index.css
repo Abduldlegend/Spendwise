@@ -56,12 +56,15 @@
 
   --track: #f1f5f9;
 
+  /* Faint blueprint grid used behind the marketing landing page. */
+  --grid-line: rgb(15 23 42 / 0.035);
+
   /* Emitted here as well as in `@theme` below: `@theme inline` inlines the
-     value into the `font-sans`/`font-mono` utilities but does not always emit
-     the custom property, which left `var(--font-sans)` unresolved (serif
-     fallback). Declaring them on :root guarantees the prototype's Geist stack. */
+      value into the `font-sans`/`font-mono` utilities but does not always emit
+      the custom property, which left `var(--font-sans)` unresolved (serif
+      fallback). Declaring them on :root guarantees the prototype's font stack. */
   --font-sans: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-mono: 'Geist Mono', ui-monospace, 'SF Mono', 'Roboto Mono', monospace;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', 'Roboto Mono', monospace;
 }
 
 .dark {
@@ -109,6 +112,8 @@
   --info-subtle: #1e1b4b;
 
   --track: #1e293b;
+
+  --grid-line: rgb(148 163 184 / 0.05);
 }
 
 /* `inline` keeps the var() reference intact so the .dark override cascades. */
@@ -161,7 +166,7 @@
   --font-sans:
     'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-mono:
-    'Geist Mono', ui-monospace, 'SF Mono', 'Roboto Mono', monospace;
+    'JetBrains Mono', ui-monospace, 'SF Mono', 'Roboto Mono', monospace;
 
   --radius-tile: 0.5rem;
   --radius-panel: 0.75rem;
@@ -188,6 +193,7 @@
   html {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: smooth;
   }
 
   body {
@@ -202,6 +208,14 @@
     font-variant-numeric: tabular-nums lining-nums;
   }
 
+  /* Blueprint background for the public landing page. */
+  .ledger-grid {
+    background-image:
+      linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+
   :focus-visible {
     outline: 1px solid var(--brand-accent);
     outline-offset: 1px;
@@ -209,6 +223,10 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
   *,
   *::before,
   *::after {

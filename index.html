@@ -4,6 +4,26 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+      // Resolve and apply the theme before first paint so the dark default
+      // never flashes light. Mirrors src/context/ThemeContext.jsx and the
+      // `spendwise:theme` localStorage key.
+      (function () {
+        try {
+          var stored = JSON.parse(localStorage.getItem('spendwise:theme'))
+          var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+          var resolved
+          if (stored === 'light' || stored === 'dark') resolved = stored
+          else if (stored === 'system') resolved = prefersDark ? 'dark' : 'light'
+          else resolved = 'dark'
+          document.documentElement.classList.toggle('dark', resolved === 'dark')
+          document.documentElement.style.colorScheme = resolved
+        } catch (error) {
+          document.documentElement.classList.add('dark')
+          document.documentElement.style.colorScheme = 'dark'
+        }
+      })()
+    </script>
     <meta
       name="description"
       content="SpendWise — bank-grade personal finance and multi-rail budgeting ledger."
@@ -11,7 +31,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
     <link

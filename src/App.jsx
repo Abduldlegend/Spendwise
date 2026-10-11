@@ -12,8 +12,9 @@ import AuthPage from './pages/AuthPage'
 import AuthenticatedLayout from './pages/AuthenticatedLayout'
 import BudgetsPage from './pages/BudgetsPage'
 import DashboardPage from './pages/DashboardPage'
+import LandingPage from './pages/LandingPage'
 import MilestonesPage from './pages/MilestonesPage'
-import RequireAuth, { RedirectIfAuthenticated } from './pages/RequireAuth'
+import RequireAuth, { LandingRoute, RedirectIfAuthenticated } from './pages/RequireAuth'
 import SettingsPage from './pages/SettingsPage'
 import TransactionsPage from './pages/TransactionsPage'
 
@@ -52,6 +53,10 @@ export default function App() {
           <AuthProvider>
             <DataProvider>
               <Routes>
+                <Route element={<LandingRoute />}>
+                  <Route index element={<LandingPage />} />
+                </Route>
+
                 <Route element={<RedirectIfAuthenticated />}>
                   <Route path="/signin" element={<AuthPage mode="signin" />} />
                   <Route path="/register" element={<AuthPage mode="register" />} />
@@ -59,7 +64,7 @@ export default function App() {
 
                 <Route element={<RequireAuth />}>
                   <Route element={<AuthenticatedLayout />}>
-                    <Route index element={<DashboardPage />} />
+                    <Route path="/dashboard" element={<DashboardPage />} />
                     <Route path="/transactions" element={<TransactionsPage />} />
                     <Route path="/budgets" element={<BudgetsPage />} />
                     <Route path="/milestones" element={<MilestonesPage />} />

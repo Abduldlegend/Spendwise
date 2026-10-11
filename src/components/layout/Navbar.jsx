@@ -1,3 +1,5 @@
+import BrandMark from '../ui/BrandMark'
+
 /**
  * Top bar, matching the reference system header.
  *
@@ -37,17 +39,9 @@ export default function Navbar({
   return (
     <header className="sticky top-0 z-30 flex items-center gap-2 border-b border-hairline bg-surface/90 px-3 py-2.5 backdrop-blur sm:gap-4 sm:px-6 sm:py-3">
       <div className="flex min-w-0 items-center gap-3">
-        <div className="flex items-center gap-2.5 lg:hidden">
-          <span
-            aria-hidden="true"
-            className="grid size-8 shrink-0 place-items-center rounded-full bg-brand text-fg-on-brand"
-          >
-            <span className="material-symbols-outlined text-lg">account_balance_wallet</span>
-          </span>
-          <div className="min-w-0">
-            <p className="truncate text-sm font-semibold text-fg">SpendWise</p>
-            {greeting && <p className="truncate text-[11px] font-medium text-fg-muted">{greeting}</p>}
-          </div>
+        <div className="min-w-0 lg:hidden">
+          <BrandMark to="/dashboard" />
+          {greeting && <p className="mt-0.5 truncate text-[11px] font-medium text-fg-muted">{greeting}</p>}
         </div>
 
         <div className="hidden min-w-0 lg:block">

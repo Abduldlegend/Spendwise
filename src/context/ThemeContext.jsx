@@ -15,13 +15,14 @@ function resolve(preference) {
  * Theme provider.
  *
  * AGENTS.md: "Theme toggling is local + localStorage only — never sent to an API
- * in v1." The `system` preference follows the OS and reacts to live changes.
+ * in v1." Dark is the default for a visitor with no saved preference; the
+ * `system` preference follows the OS and reacts to live changes.
  */
 export function ThemeProvider({ children }) {
   const [theme, setThemeState] = useState(() => {
-    const stored = load(STORAGE_KEYS.theme, 'system')
+    const stored = load(STORAGE_KEYS.theme, 'dark')
     const parsed = THEME_SCHEMA.safeParse(stored)
-    return parsed.success ? parsed.data : 'system'
+    return parsed.success ? parsed.data : 'dark'
   })
 
   const resolved = resolve(theme)

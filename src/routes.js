@@ -6,7 +6,7 @@
  */
 export const NAV_LINKS = [
   {
-    to: '/',
+    to: '/dashboard',
     label: 'Overview',
     icon: 'space_dashboard',
     title: 'Personal Financial Overview',

@@ -6,14 +6,15 @@
  *
  * @param {object} props
  * @param {string} [props.title] visually hidden page heading
- * @param {'sm'|'md'|'lg'} [props.width='lg'] content well width
+ * @param {'sm'|'md'|'lg'|'full'} [props.width='full'] content well width
  * @param {import('react').ReactNode} props.children
  */
-export default function PageContainer({ title, width = 'lg', children }) {
+export default function PageContainer({ title, width = 'full', children }) {
   const widths = {
     sm: 'max-w-3xl',
     md: 'max-w-5xl',
     lg: 'max-w-6xl',
+    full: 'max-w-none',
   }
 
   return (

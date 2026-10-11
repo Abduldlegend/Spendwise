@@ -3,6 +3,7 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import Navbar from '../components/layout/Navbar'
 import Sidebar from '../components/layout/Sidebar'
 import BottomNav from '../components/layout/BottomNav'
+import ConfirmDialog from '../components/ui/ConfirmDialog'
 import Modal from '../components/ui/Modal'
 import TransactionForm from '../components/forms/TransactionForm'
 import { useAuth } from '../context/AuthContext'
@@ -29,14 +30,16 @@ export default function AuthenticatedLayout() {
   const location = useLocation()
 
   const [quickAdd, setQuickAdd] = useState(null)
+  const [confirmSignOut, setConfirmSignOut] = useState(false)
   const [submitting, setSubmitting] = useState(false)
 
   const meta = getPageMeta(location.pathname)
   const greeting = `${getGreeting()}, ${getFirstName(user?.name)}`
 
   const handleSignOut = async () => {
+    setConfirmSignOut(false)
     await signOut()
-    navigate('/signin', { replace: true })
+    navigate('/', { replace: true })
   }
 
   const handleQuickAdd = async (values) => {
@@ -62,7 +65,7 @@ export default function AuthenticatedLayout() {
           greeting={greeting}
           onDeposit={() => setQuickAdd('income')}
           onSpend={() => setQuickAdd('expense')}
-          onSignOut={handleSignOut}
+          onSignOut={() => setConfirmSignOut(true)}
           onToggleTheme={toggle}
           dark={resolvedTheme === 'dark'}
           notificationCount={policyAlerts.length}
@@ -91,6 +94,20 @@ export default function AuthenticatedLayout() {
           onCancel={() => setQuickAdd(null)}
         />
       </Modal>
+
+      <ConfirmDialog
+        open={confirmSignOut}
+        title="Sign out?"
+        description="You'll need to sign in again to reach your ledger."
+        confirmLabel="Sign out"
+        tone="danger"
+        onConfirm={handleSignOut}
+        onCancel={() => setConfirmSignOut(false)}
+      >
+        <p className="text-sm text-fg-muted">
+          Nothing is deleted — your transactions and budgets stay on this device.
+        </p>
+      </ConfirmDialog>
     </div>
   )
 }

@@ -1,9 +1,11 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Card from '../components/ui/Card'
 import PageContainer from '../components/layout/PageContainer'
 import { Button } from '../components/ui/Button'
+import ConfirmDialog from '../components/ui/ConfirmDialog'
 import ConnectRailForm from '../components/forms/ConnectRailForm'
 import { useAuth } from '../context/AuthContext'
 import { useData } from '../context/DataContext'
@@ -21,7 +23,15 @@ export default function SettingsPage() {
   const { user, rails, updateProfile, connectRail, disconnectRail, currency } = useData()
   const { theme, setTheme } = useTheme()
   const { signOut } = useAuth()
+  const navigate = useNavigate()
   const [connecting, setConnecting] = useState(false)
+  const [confirmSignOut, setConfirmSignOut] = useState(false)
+
+  const handleSignOut = async () => {
+    setConfirmSignOut(false)
+    await signOut()
+    navigate('/', { replace: true })
+  }
 
   const {
     register,
@@ -63,7 +73,7 @@ export default function SettingsPage() {
   }
 
   return (
-    <PageContainer title="Settings" width="md">
+    <PageContainer title="Settings">
       <div className="flex flex-col gap-4">
         <Card title="Profile" subtitle="How your name and limits are recorded">
           <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4" noValidate>
@@ -205,12 +215,26 @@ export default function SettingsPage() {
               Figures are shown in <span className="font-semibold text-fg">{currency}</span>. Derived values are
               recalculated on every render and never stored.
             </p>
-            <Button variant="secondary" onClick={signOut}>
+            <Button variant="secondary" onClick={() => setConfirmSignOut(true)}>
               Sign out
             </Button>
           </div>
         </Card>
       </div>
+
+      <ConfirmDialog
+        open={confirmSignOut}
+        title="Sign out?"
+        description="You'll need to sign in again to reach your ledger."
+        confirmLabel="Sign out"
+        tone="danger"
+        onConfirm={handleSignOut}
+        onCancel={() => setConfirmSignOut(false)}
+      >
+        <p className="text-sm text-fg-muted">
+          Nothing is deleted — your transactions and budgets stay on this device.
+        </p>
+      </ConfirmDialog>
     </PageContainer>
   )
 }

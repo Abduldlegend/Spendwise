@@ -38,7 +38,7 @@ Modern professionals and creators in emerging markets (e.g., Nigeria, Kenya, Gha
 ## 3. Product Principles & Visual Language
 
 1. **Quiet Authority & Bank-Grade Craft:** 1px hairline structural borders (`#E2E8F0` / `#1E293B`), flat elevation, and no heavy drop shadows.
-2. **Tabular Precision:** Every numerical figure, monetary sum, percentage, and timestamp is rendered using monospaced tabular numerals (`Geist Mono`, `tabular-nums`) to ensure scannable vertical alignment.
+2. **Tabular Precision:** Every numerical figure, monetary sum, percentage, and timestamp is rendered using monospaced tabular numerals (`JetBrains Mono`, `tabular-nums`) to ensure scannable vertical alignment.
 3. **Restrained Semantic Color:**
    - Inflow / Positive Net Trend: Emerald Teal (`#0D9488` / `#059669`)
    - Outflow / Expense: Slate / Red (`#DC2626`)
@@ -141,7 +141,7 @@ Modern professionals and creators in emerging markets (e.g., Nigeria, Kenya, Gha
 | Category | Specification |
 |---|---|
 | **Frontend Stack** | React 18+ / Next.js 14, Tailwind CSS, Lucide / Material Symbols Icons |
-| **Typography** | `Geist Sans` (UI) and `Geist Mono` (Financial Numerals) |
+| **Typography** | `Geist Sans` (UI) and `JetBrains Mono` (Financial Numerals) |
 | **State Management** | Zustand or TanStack Query for cache invalidation |
 | **Data Alignment** | `font-variant-numeric: tabular-nums lining-nums;` |
 | **Responsive Breakpoints** | Mobile (<768px), Tablet (768px–1023px), Desktop (≥1024px) |

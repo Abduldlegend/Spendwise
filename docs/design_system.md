@@ -45,7 +45,7 @@
 
 ### 2.1 Font Family
 - **Primary Typeface:** `Geist`, `-apple-system`, `BlinkMacSystemFont`, `Segoe UI`, `Roboto`, `sans-serif`.
-- **Numerical & Financial Figures:** Monospaced tabular figures (`font-variant-numeric: tabular-nums lining-nums; font-family: 'Geist Mono', 'SF Mono', 'Roboto Mono', monospace`) applied to all balances, ledger values, dates, and percentages.
+- **Numerical & Financial Figures:** Monospaced tabular figures (`font-variant-numeric: tabular-nums lining-nums; font-family: 'JetBrains Mono', 'SF Mono', 'Roboto Mono', monospace`) applied to all balances, ledger values, dates, and percentages.
 
 ### 2.2 Scale & Hierarchy
 - `Display / Page Hero`: 28px–32px | `font-semibold` | `tracking-tight` (e.g., `₦4,850,200.50`)
