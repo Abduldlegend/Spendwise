@@ -5,6 +5,7 @@ import Sidebar from '../components/layout/Sidebar'
 import BottomNav from '../components/layout/BottomNav'
 import ConfirmDialog from '../components/ui/ConfirmDialog'
 import Modal from '../components/ui/Modal'
+import RailBalanceCard from '../components/ui/RailBalanceCard'
 import TransactionForm from '../components/forms/TransactionForm'
 import { useAuth } from '../context/AuthContext'
 import { useTheme } from '../context/ThemeContext'
@@ -31,6 +32,7 @@ export default function AuthenticatedLayout() {
 
   const [quickAdd, setQuickAdd] = useState(null)
   const [confirmSignOut, setConfirmSignOut] = useState(false)
+  const [selectedRail, setSelectedRail] = useState(null)
   const [submitting, setSubmitting] = useState(false)
 
   const meta = getPageMeta(location.pathname)
@@ -56,7 +58,7 @@ export default function AuthenticatedLayout() {
 
   return (
     <div className="flex min-h-dvh bg-surface">
-      <Sidebar links={NAV_LINKS} rails={rails} user={user ?? undefined} />
+      <Sidebar links={NAV_LINKS} rails={rails} user={user ?? undefined} onSelectRail={setSelectedRail} />
 
       <div className="flex min-w-0 flex-1 flex-col">
         <Navbar
@@ -70,6 +72,8 @@ export default function AuthenticatedLayout() {
           dark={resolvedTheme === 'dark'}
           notificationCount={policyAlerts.length}
           onNotifications={() => navigate('/budgets')}
+          rails={rails}
+          onSelectRail={setSelectedRail}
         />
 
         <div className="flex-1 pb-20 lg:pb-0">
@@ -93,6 +97,16 @@ export default function AuthenticatedLayout() {
           defaultValues={{ type: quickAdd ?? 'expense' }}
           onCancel={() => setQuickAdd(null)}
         />
+      </Modal>
+
+      <Modal
+        open={Boolean(selectedRail)}
+        onClose={() => setSelectedRail(null)}
+        title={selectedRail?.name ?? 'Rail'}
+        align="center"
+        footer={null}
+      >
+        {selectedRail && <RailBalanceCard rail={selectedRail} />}
       </Modal>
 
       <ConfirmDialog

@@ -51,6 +51,21 @@ export function getBalance(transactions = []) {
 }
 
 /**
+ * Net balance per connected rail, derived from that rail's transactions. A rail
+ * with no activity is simply absent from the map; callers default it to 0.
+ * @param {Array<object>} transactions
+ * @returns {Record<string, number>} railId -> net balance
+ */
+export function getRailBalances(transactions = []) {
+  const totals = {}
+  for (const tx of transactions) {
+    if (!tx.railId) continue
+    totals[tx.railId] = round2((totals[tx.railId] ?? 0) + signedAmount(tx))
+  }
+  return totals
+}
+
+/**
  * Inflow / spend for a cycle, with the prior cycle for comparison.
  * @param {Array<object>} transactions
  * @param {object} [options]

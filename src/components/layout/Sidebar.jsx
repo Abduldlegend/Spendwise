@@ -1,5 +1,6 @@
 import { NavLink } from 'react-router-dom'
 import BrandMark from '../ui/BrandMark'
+import RailList from '../ui/RailList'
 
 /**
  * Desktop navigation rail.
@@ -14,10 +15,11 @@ import BrandMark from '../ui/BrandMark'
  *
  * @param {object} props
  * @param {Array<{ to: string, label: string, icon: string }>} props.links
- * @param {Array<{ id: string, name: string, currency: string, last4?: string, status?: string }>} [props.rails]
+ * @param {Array<{ id: string, name: string, currency: string, last4?: string, status?: string, balance?: number }>} [props.rails]
  * @param {{ name: string, email: string }} [props.user]
+ * @param {(rail: object) => void} [props.onSelectRail]
  */
-export default function Sidebar({ links, rails = [], user }) {
+export default function Sidebar({ links, rails = [], user, onSelectRail }) {
   return (
     <aside className="sticky top-0 hidden h-dvh w-64 shrink-0 flex-col gap-6 border-r border-hairline bg-card px-4 py-6 lg:flex">
       <div className="px-2">
@@ -55,27 +57,7 @@ export default function Sidebar({ links, rails = [], user }) {
             <p className="px-2 pb-2 text-[10px] font-semibold uppercase tracking-wider text-fg-faint">
               Connected rails
             </p>
-            <ul className="flex flex-col gap-0.5">
-              {rails.map((rail) => (
-                <li
-                  key={rail.id}
-                  className="flex items-center justify-between gap-2 px-2 py-1 text-xs text-fg-muted"
-                >
-                  <span className="flex min-w-0 items-center gap-2">
-                    <span
-                      aria-hidden="true"
-                      className={`size-2 shrink-0 rounded-full ${
-                        rail.status === 'degraded' ? 'bg-warning' : 'bg-positive'
-                      }`}
-                    />
-                    <span className="truncate">{rail.name}</span>
-                  </span>
-                  <span className="shrink-0 font-mono text-[11px] text-fg-faint">
-                    {rail.last4 ? `..${rail.last4}` : rail.currency}
-                  </span>
-                </li>
-              ))}
-            </ul>
+            <RailList rails={rails} onSelectRail={onSelectRail} />
           </div>
         )}
 

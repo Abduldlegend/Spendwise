@@ -5,6 +5,8 @@ import BudgetProgressBar from './BudgetProgressBar'
 import CategoryBadge from './CategoryBadge'
 import ConfirmDialog from './ConfirmDialog'
 import MetricCard from './MetricCard'
+import RailBalanceCard from './RailBalanceCard'
+import RailList from './RailList'
 import SpendingDistributionBar from './SpendingDistributionBar'
 import TransactionTable from './TransactionTable'
 
@@ -206,5 +208,60 @@ describe('ConfirmDialog', () => {
 
     await userEvent.click(screen.getByRole('button', { name: 'Cancel' }))
     expect(onCancel).toHaveBeenCalledTimes(1)
+  })
+})
+
+const rails = [
+  {
+    id: 'rail_zenith',
+    name: 'Zenith Bank',
+    kind: 'bank',
+    currency: 'NGN',
+    last4: '8201',
+    status: 'connected',
+    balance: 4_850_200.5,
+  },
+  {
+    id: 'rail_kuda',
+    name: 'Kuda MFB',
+    kind: 'digital',
+    currency: 'NGN',
+    status: 'degraded',
+    balance: -1200,
+  },
+]
+
+describe('RailList', () => {
+  it('renders each rail with its compact balance', () => {
+    render(<RailList rails={rails} />)
+    expect(screen.getByText('Zenith Bank')).toBeInTheDocument()
+    expect(screen.getByText('₦4.85M')).toBeInTheDocument()
+    expect(screen.getByText('-₦1.2K')).toBeInTheDocument()
+  })
+
+  it('reports the clicked rail', async () => {
+    const onSelectRail = vi.fn()
+    render(<RailList rails={rails} onSelectRail={onSelectRail} />)
+    await userEvent.click(screen.getByRole('button', { name: /Kuda MFB/ }))
+    expect(onSelectRail).toHaveBeenCalledWith(rails[1])
+  })
+
+  it('renders nothing when there are no rails', () => {
+    const { container } = render(<RailList rails={[]} />)
+    expect(container).toBeEmptyDOMElement()
+  })
+})
+
+describe('RailBalanceCard', () => {
+  it('shows the exact balance and the rail metadata', () => {
+    render(<RailBalanceCard rail={rails[0]} />)
+    expect(screen.getByText('₦4,850,200.50')).toBeInTheDocument()
+    expect(screen.getByText('•••• 8201')).toBeInTheDocument()
+  })
+
+  it('falls back to a connected status and zero balance', () => {
+    render(<RailBalanceCard rail={{ name: 'Cash', kind: 'cash', currency: 'NGN' }} />)
+    expect(screen.getByText('₦0.00')).toBeInTheDocument()
+    expect(screen.getByText('connected')).toBeInTheDocument()
   })
 })

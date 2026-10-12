@@ -13,6 +13,8 @@ import { Button, Icon } from './Button'
  * @param {string} props.title
  * @param {string} [props.description]
  * @param {boolean} [props.dismissible=true] allow Escape/backdrop to close
+ * @param {'auto'|'center'} [props.align='auto'] 'auto' is a bottom sheet on
+ *   mobile and centered from `sm` up; 'center' is centered at every width.
  * @param {import('react').ReactNode} [props.footer]
  * @param {import('react').ReactNode} props.children
  */
@@ -22,6 +24,7 @@ export default function Modal({
   title,
   description,
   dismissible = true,
+  align = 'auto',
   footer,
   children,
 }) {
@@ -68,8 +71,14 @@ export default function Modal({
 
   if (!open) return null
 
+  const centered = align === 'center'
+
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center p-0 sm:items-center sm:p-6">
+    <div
+      className={`fixed inset-0 z-50 flex justify-center ${
+        centered ? 'items-center p-4 sm:p-6' : 'items-end p-0 sm:items-center sm:p-6'
+      }`}
+    >
       <button
         type="button"
         aria-label="Close dialog"
@@ -83,7 +92,9 @@ export default function Modal({
         aria-labelledby="modal-title"
         aria-describedby={description ? 'modal-description' : undefined}
         tabIndex={-1}
-        className="relative flex max-h-[92vh] w-full max-w-lg flex-col gap-4 overflow-y-auto rounded-t-2xl border border-hairline bg-card p-5 shadow-popover-light animate-fade-in focus:outline-none sm:rounded-2xl dark:shadow-popover-dark"
+        className={`relative flex max-h-[92vh] w-full max-w-lg flex-col gap-4 overflow-y-auto border border-hairline bg-card p-5 shadow-popover-light animate-fade-in focus:outline-none dark:shadow-popover-dark ${
+          centered ? 'rounded-2xl' : 'rounded-t-2xl sm:rounded-2xl'
+        }`}
       >
         <header className="flex items-start justify-between gap-4">
           <div className="min-w-0">

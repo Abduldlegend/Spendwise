@@ -11,6 +11,7 @@ import {
   getPolicyAlerts,
   getProjectedBalance,
   getProjectedSweep,
+  getRailBalances,
   getTransactionsForCycle,
   round2,
   selectTransactions,
@@ -62,6 +63,32 @@ describe('getBalance', () => {
       tx({ id: 'b', type: 'expense', amount: 2000 }),
     ])
     expect(result).toBe(3000)
+  })
+})
+
+describe('getRailBalances', () => {
+  it('returns an empty map for an empty ledger', () => {
+    expect(getRailBalances([])).toEqual({})
+  })
+
+  it('nets income and spend against a single rail', () => {
+    const result = getRailBalances([
+      tx({ id: 'a', railId: 'zenith', type: 'income', amount: 5000 }),
+      tx({ id: 'b', railId: 'zenith', type: 'expense', amount: 2000 }),
+    ])
+    expect(result).toEqual({ zenith: 3000 })
+  })
+
+  it('keeps rails independent', () => {
+    const result = getRailBalances([
+      tx({ id: 'a', railId: 'zenith', type: 'income', amount: 5000 }),
+      tx({ id: 'b', railId: 'kuda', type: 'expense', amount: 1200 }),
+    ])
+    expect(result).toEqual({ zenith: 5000, kuda: -1200 })
+  })
+
+  it('ignores rows without a rail', () => {
+    expect(getRailBalances([tx({ railId: undefined })])).toEqual({})
   })
 })
 

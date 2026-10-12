@@ -20,6 +20,7 @@ import {
   getHealthState,
   getPolicyAlerts,
   getProjectedSweep,
+  getRailBalances,
 } from '../utils/derived'
 import { cycleKey } from '../utils/cycle'
 import { accountKey, load, save, STORAGE_KEYS } from '../utils/storage'
@@ -413,6 +414,11 @@ export function DataProvider({ children }) {
   const currency = BASE_CURRENCY
 
   const balance = useMemo(() => getBalance(state.transactions), [state.transactions])
+  const railBalances = useMemo(() => getRailBalances(state.transactions), [state.transactions])
+  const railViews = useMemo(
+    () => state.rails.map((rail) => ({ ...rail, balance: railBalances[rail.id] ?? 0 })),
+    [state.rails, railBalances],
+  )
   const flow = useMemo(
     () => getFlowTotals(state.transactions, { cycle }),
     [state.transactions, cycle],
@@ -453,7 +459,8 @@ export function DataProvider({ children }) {
       budgets: budgetViews,
       rawBudgets: state.budgets,
       milestones: state.milestones,
-      rails: state.rails,
+      rails: railViews,
+      railBalances,
       user,
       isLoading: state.isLoading,
       error: state.error,
@@ -484,7 +491,8 @@ export function DataProvider({ children }) {
       state.transactions,
       state.budgets,
       state.milestones,
-      state.rails,
+      railViews,
+      railBalances,
       state.isLoading,
       state.error,
       state.pending,
