@@ -1,9 +1,10 @@
 import { useMemo } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useOutletContext } from 'react-router-dom'
 import BudgetProgressBar from '../components/ui/BudgetProgressBar'
 import Card from '../components/ui/Card'
 import CategoryBadge from '../components/ui/CategoryBadge'
 import MetricCard from '../components/ui/MetricCard'
+import RailsMenu from '../components/ui/RailsMenu'
 import Skeleton from '../components/ui/Skeleton'
 import SpendingDistributionBar from '../components/ui/SpendingDistributionBar'
 import PageContainer from '../components/layout/PageContainer'
@@ -31,7 +32,12 @@ export default function DashboardPage() {
     isLoading,
     policyAlerts,
     sweep,
+    rails,
   } = useData()
+
+  // Quick actions live in the header from `lg` up; below that the layout hands
+  // them down so they can sit inside the Net balance card instead.
+  const { onDeposit, onSpend, onSelectRail } = useOutletContext() ?? {}
 
   const cycle = currentCycle ?? cycleKey()
   const recent = useMemo(() => getTransactionsForCycle(transactions, cycle).slice(0, 6), [transactions, cycle])
@@ -62,7 +68,33 @@ export default function DashboardPage() {
           label="Net balance"
           value={formatCurrency(balance, currency)}
           icon="account_balance_wallet"
-        />
+        >
+          <div className="flex items-center gap-2 lg:hidden">
+            <RailsMenu rails={rails} onSelectRail={onSelectRail} />
+            <button
+              type="button"
+              onClick={onDeposit}
+              aria-label="Record deposit"
+              className="inline-flex h-8 items-center justify-center gap-1.5 rounded-lg bg-brand px-2 text-xs font-semibold text-fg-on-brand transition-colors hover:bg-brand-hover"
+            >
+              <span aria-hidden="true" className="material-symbols-outlined text-base">
+                add
+              </span>
+              Deposit
+            </button>
+            <button
+              type="button"
+              onClick={onSpend}
+              aria-label="Record spend"
+              className="inline-flex h-8 items-center justify-center gap-1.5 rounded-lg border border-hairline bg-card px-2 text-xs font-semibold text-fg transition-colors hover:bg-hover"
+            >
+              <span aria-hidden="true" className="material-symbols-outlined text-base text-negative-fg">
+                remove
+              </span>
+              Spend
+            </button>
+          </div>
+        </MetricCard>
         <MetricCard
           label="Inflow"
           value={formatCompact(flow.inflow, currency)}

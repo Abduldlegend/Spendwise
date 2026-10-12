@@ -1,6 +1,5 @@
-import { useEffect, useRef, useState } from 'react'
 import BrandMark from '../ui/BrandMark'
-import RailList from '../ui/RailList'
+import RailsMenu from '../ui/RailsMenu'
 
 /**
  * Top bar, matching the reference system header.
@@ -12,8 +11,8 @@ import RailList from '../ui/RailList'
  *
  * Icon controls are sized to stay on one line down to the smallest phone.
  *
- * Structure only — every value and callback arrives via props; the rails
- * switcher keeps only its own open/closed disclosure state.
+ * Structure only — every value and callback arrives via props. Below `lg` the
+ * quick actions move into the Net balance card so the header stays uncluttered.
  *
  * @param {object} props
  * @param {string} props.title
@@ -44,30 +43,6 @@ export default function Navbar({
   rails = [],
   onSelectRail,
 }) {
-  const [railsOpen, setRailsOpen] = useState(false)
-  const railsRef = useRef(null)
-
-  useEffect(() => {
-    if (!railsOpen) return undefined
-    const onPointerDown = (event) => {
-      if (railsRef.current && !railsRef.current.contains(event.target)) setRailsOpen(false)
-    }
-    const onKeyDown = (event) => {
-      if (event.key === 'Escape') setRailsOpen(false)
-    }
-    document.addEventListener('mousedown', onPointerDown)
-    document.addEventListener('keydown', onKeyDown)
-    return () => {
-      document.removeEventListener('mousedown', onPointerDown)
-      document.removeEventListener('keydown', onKeyDown)
-    }
-  }, [railsOpen])
-
-  const handleSelectRail = (rail) => {
-    setRailsOpen(false)
-    onSelectRail?.(rail)
-  }
-
   return (
     <header className="sticky top-0 z-30 flex items-center gap-2 border-b border-hairline bg-surface/90 px-3 py-2.5 backdrop-blur sm:gap-4 sm:px-6 sm:py-3">
       <div className="flex min-w-0 items-center gap-3">
@@ -84,46 +59,11 @@ export default function Navbar({
 
       <div className="ml-auto flex items-center gap-1.5 sm:gap-3">
         {onSelectRail && (
-          <div className="relative" ref={railsRef}>
-            <button
-              type="button"
-              onClick={() => setRailsOpen((open) => !open)}
-              aria-haspopup="menu"
-              aria-expanded={railsOpen}
-              title="Connected rails"
-              className="inline-flex h-8 items-center gap-1.5 rounded-lg border border-hairline bg-card px-2 text-xs font-semibold text-fg-muted transition-colors hover:bg-hover hover:text-fg"
-            >
-              <span aria-hidden="true" className="material-symbols-outlined text-base">
-                account_balance_wallet
-              </span>
-              <span className="hidden sm:inline">Rails</span>
-              {rails.length > 0 && (
-                <span className="rounded-full bg-brand-subtle px-1.5 font-mono text-[10px] font-semibold text-brand-fg">
-                  {rails.length}
-                </span>
-              )}
-            </button>
-
-            {railsOpen && (
-              <div
-                role="menu"
-                className="fixed inset-x-3 top-16 z-40 max-h-[70vh] overflow-y-auto rounded-xl border border-hairline bg-card p-2 shadow-popover-light dark:shadow-popover-dark sm:absolute sm:inset-x-auto sm:right-0 sm:top-full sm:mt-2 sm:max-h-none sm:w-72"
-              >
-                <p className="px-3 pb-2 pt-1 text-[10px] font-semibold uppercase tracking-wider text-fg-faint">
-                  Connected rails
-                </p>
-                {rails.length > 0 ? (
-                  <RailList variant="menu" rails={rails} onSelectRail={handleSelectRail} />
-                ) : (
-                  <p className="px-3 py-2 text-sm text-fg-muted">No rails connected yet.</p>
-                )}
-              </div>
-            )}
-          </div>
+          <RailsMenu rails={rails} onSelectRail={onSelectRail} className="hidden lg:block" />
         )}
 
         {(onDeposit || onSpend) && (
-          <div className="flex items-center gap-1.5 sm:gap-2">
+          <div className="hidden items-center gap-1.5 sm:gap-2 lg:flex">
             {onDeposit && (
               <button
                 type="button"
@@ -161,7 +101,7 @@ export default function Navbar({
                 onClick={onSignOut}
                 title="Sign out"
                 aria-label="Sign out"
-                className="grid size-8 place-items-center rounded-lg text-fg-muted transition-colors hover:bg-hover hover:text-fg"
+                className="hidden size-8 place-items-center rounded-lg text-fg-muted transition-colors hover:bg-hover hover:text-fg lg:grid"
               >
                 <span aria-hidden="true" className="material-symbols-outlined text-base">
                   logout

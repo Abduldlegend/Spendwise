@@ -77,7 +77,13 @@ export default function AuthenticatedLayout() {
         />
 
         <div className="flex-1 pb-20 lg:pb-0">
-          <Outlet />
+          <Outlet
+            context={{
+              onDeposit: () => setQuickAdd('income'),
+              onSpend: () => setQuickAdd('expense'),
+              onSelectRail: setSelectedRail,
+            }}
+          />
         </div>
       </div>
 

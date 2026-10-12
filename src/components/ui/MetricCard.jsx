@@ -15,6 +15,7 @@ import { formatPercent } from '../../utils/format'
  * @param {'auto'|'up'|'down'} [props.deltaTone='auto'] which direction reads as good
  * @param {import('react').ReactNode} [props.icon] Material Symbols glyph name
  * @param {boolean} [props.tone='default'] 'default' | 'accent'
+ * @param {import('react').ReactNode} [props.children] optional controls under the value
  */
 export default function MetricCard({
   label,
@@ -24,6 +25,7 @@ export default function MetricCard({
   deltaTone = 'auto',
   icon,
   tone = 'default',
+  children,
 }) {
   const hasDelta = delta !== undefined && delta !== null && Number.isFinite(delta)
   const rising = hasDelta && delta > 0
@@ -63,6 +65,8 @@ export default function MetricCard({
         )}
         {hint && <span className="truncate text-fg-muted">{hint}</span>}
       </div>
+
+      {children}
     </article>
   )
 }

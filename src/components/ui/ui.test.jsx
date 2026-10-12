@@ -7,6 +7,7 @@ import ConfirmDialog from './ConfirmDialog'
 import MetricCard from './MetricCard'
 import RailBalanceCard from './RailBalanceCard'
 import RailList from './RailList'
+import RailsMenu from './RailsMenu'
 import SpendingDistributionBar from './SpendingDistributionBar'
 import TransactionTable from './TransactionTable'
 
@@ -263,5 +264,26 @@ describe('RailBalanceCard', () => {
     render(<RailBalanceCard rail={{ name: 'Cash', kind: 'cash', currency: 'NGN' }} />)
     expect(screen.getByText('₦0.00')).toBeInTheDocument()
     expect(screen.getByText('connected')).toBeInTheDocument()
+  })
+})
+
+describe('RailsMenu', () => {
+  it('opens the rail list on click and reports a selection', async () => {
+    const onSelectRail = vi.fn()
+    render(<RailsMenu rails={rails} onSelectRail={onSelectRail} />)
+
+    expect(screen.queryByText('Zenith Bank')).not.toBeInTheDocument()
+    await userEvent.click(screen.getByRole('button', { name: /rails/i }))
+    expect(screen.getByText('Zenith Bank')).toBeInTheDocument()
+
+    await userEvent.click(screen.getByRole('button', { name: /Kuda MFB/ }))
+    expect(onSelectRail).toHaveBeenCalledWith(rails[1])
+    expect(screen.queryByText('Zenith Bank')).not.toBeInTheDocument()
+  })
+
+  it('shows an empty state when no rails are connected', async () => {
+    render(<RailsMenu rails={[]} />)
+    await userEvent.click(screen.getByRole('button', { name: /rails/i }))
+    expect(screen.getByText(/No rails connected yet/i)).toBeInTheDocument()
   })
 })
