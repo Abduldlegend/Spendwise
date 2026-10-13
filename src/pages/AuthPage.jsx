@@ -14,7 +14,7 @@ import { isGoogleAuthEnabled } from '../config'
  * Shared sign-in / sign-up screen.
  *
  * Email + password only validates shape (mocked credential path). Google sign-in
- * uses real Google Identity Services and is enabled once `VITE_GOOGLE_CLIENT_ID`
+ * uses real Google Identity Services and is enabled once `GOOGLE_CLIENT_ID`
  * is configured; without it the button renders a disabled fallback.
  */
 const credentialsSchema = z.object({
@@ -227,7 +227,7 @@ export default function AuthPage({ mode }) {
             <button
               type="button"
               disabled
-              title="Set VITE_GOOGLE_CLIENT_ID to enable Google sign-in"
+              title="Set GOOGLE_CLIENT_ID to enable Google sign-in"
               className="flex h-11 w-full items-center justify-center gap-2 rounded-lg border border-hairline bg-control text-base font-medium text-fg-muted opacity-60"
             >
               <Icon name="account_circle" className="text-base" />
