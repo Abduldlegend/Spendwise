@@ -37,15 +37,15 @@ export default function AuthPage({ mode }) {
   // Google renders a fixed-width button, so its width is measured from the
   // container and clamped to Google's 200–400px range to stay responsive.
   const googleButtonRef = useRef(null)
-  const [googleButtonWidth, setGoogleButtonWidth] = useState(280)
+  // const [googleButtonWidth, setGoogleButtonWidth] = useState(280)
 
   useEffect(() => {
     const node = googleButtonRef.current
     if (!node || !isGoogleAuthEnabled || typeof ResizeObserver === 'undefined') return undefined
 
-    const observer = new ResizeObserver(([entry]) => {
-      const width = Math.min(400, Math.max(200, Math.floor(entry.contentRect.width)))
-      setGoogleButtonWidth(width)
+    const observer = new ResizeObserver(([_entry]) => {
+      // const width = Math.min(400, Math.max(200, Math.floor(entry.contentRect.width)))
+      // setGoogleButtonWidth(width)
     })
     observer.observe(node)
     return () => observer.disconnect()
@@ -218,8 +218,7 @@ export default function AuthPage({ mode }) {
                   shape="rectangular"
                   text="continue_with"
                   logo_alignment="center"
-                  // width={String(googleButtonWidth)}
-                  containerProps={{ style: { width: '100%', height: '100%' } }}
+                  containerProps={{ style: { width: '100%', height: '100%', opacity: 0 } }}
                 />
               </div>
             </div>
