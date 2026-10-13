@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { GoogleOAuthProvider } from '@react-oauth/google'
 import './App.css'
-import { GOOGLE_CLIENT_ID, isGoogleAuthEnabled } from './config'
+import { VITE_GOOGLE_CLIENT_ID, isGoogleAuthEnabled } from './config'
 import ToastViewport from './components/ui/ToastViewport'
 import { AuthProvider } from './context/AuthContext'
 import { DataProvider } from './context/DataContext'
@@ -85,7 +85,7 @@ export default function App() {
   // Only mount the Google provider once a client ID is configured; without it the
   // GIS script cannot load and the Google button renders a disabled fallback.
   return isGoogleAuthEnabled ? (
-    <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>{app}</GoogleOAuthProvider>
+    <GoogleOAuthProvider clientId={VITE_GOOGLE_CLIENT_ID}>{app}</GoogleOAuthProvider>
   ) : (
     app
   )
