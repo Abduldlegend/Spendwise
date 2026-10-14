@@ -1,0 +1,9 @@
+import config from "./env.js";
+
+export const corsOptions = {
+  origin: config.corsOrigin,
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+};
+

@@ -6,9 +6,13 @@
  */
 
 import { load, STORAGE_KEYS } from '../utils/storage'
+import { API_BASE_URL } from '../config'
 
-/** Base path. Every endpoint below is registered 1:1 in `src/mocks/handlers.js`. */
-const BASE = '/api'
+/**
+ * Base path. Defaults to the bundled MSW mock (`/api`); set `VITE_API_BASE_URL`
+ * (e.g. `http://localhost:4000/api/v1`) to target the real backend instead.
+ */
+const BASE = API_BASE_URL
 
 /**
  * Reads the bearer token for the active session, if any.
@@ -38,7 +42,7 @@ async function request(path, init = {}) {
 
   let response
   try {
-    response = await fetch(`${BASE}${path}`, { ...init, headers })
+    response = await fetch(`${BASE}${path}`, { ...init, headers, credentials: 'include' })
   } catch (cause) {
     const error = new Error('Network request failed')
     error.cause = cause

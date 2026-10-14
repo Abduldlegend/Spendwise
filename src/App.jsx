@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { GoogleOAuthProvider } from '@react-oauth/google'
 import './App.css'
-import { VITE_GOOGLE_CLIENT_ID, isGoogleAuthEnabled } from './config'
+import { VITE_GOOGLE_CLIENT_ID, isGoogleAuthEnabled, isMockApiEnabled } from './config'
 import ToastViewport from './components/ui/ToastViewport'
 import { AuthProvider } from './context/AuthContext'
 import { DataProvider } from './context/DataContext'
@@ -26,9 +26,12 @@ import TransactionsPage from './pages/TransactionsPage'
  * surface a message.
  */
 export default function App() {
-  const [apiReady, setApiReady] = useState(false)
+  // With a real API configured the mock is skipped, so the app is ready at once.
+  const [apiReady, setApiReady] = useState(!isMockApiEnabled)
 
   useEffect(() => {
+    if (!isMockApiEnabled) return undefined
+
     let active = true
     // MSW's interceptor runtime is heavy, so it is loaded as a separate chunk
     // instead of blocking the first paint.
