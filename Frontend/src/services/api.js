@@ -74,6 +74,16 @@ function toQuery(query) {
   return text ? `?${text}` : ''
 }
 
+// ------------------------------------------------------------------- categories
+
+/**
+ * Public taxonomy. Does not require a session, so it can load before sign-in.
+ * @returns {Promise<Array<object>>}
+ */
+export function fetchCategories() {
+  return request('/categories')
+}
+
 // ------------------------------------------------------------------ transactions
 
 /**
@@ -169,8 +179,92 @@ export function updateProfile(payload) {
   return request('/profile', { method: 'PUT', body: JSON.stringify(payload) })
 }
 
-// ------------------------------------------------------------------------- auth
+// ------------------------------------------------------------------------ admin
 
+/**
+ * Macro platform telemetry. Admin-only; counts and composition, never rows.
+ * @param {{ window?: '7d'|'30d'|'90d' }} [query]
+ */
+export function fetchAdminOverview(query) {
+  return request(`/admin/overview${toQuery(query)}`)
+}
+
+/**
+ * @param {object} [query] `{ search, status, role, kycTier, page, limit, sort }`
+ * @returns {Promise<{ items: Array<object>, page: number, limit: number, total: number, pages: number }>}
+ */
+export function fetchAdminUsers(query) {
+  return request(`/admin/users${toQuery(query)}`)
+}
+
+/** @param {string} id */
+export function fetchAdminUser(id) {
+  return request(`/admin/users/${id}`)
+}
+
+/**
+ * Applies a privileged account action. The reason is mandatory and lands in the
+ * audit trail.
+ *
+ * @param {string} id
+ * @param {{ action: 'suspend'|'reinstate'|'role'|'kycTier', reason: string, role?: 'user'|'admin', kycTier?: number }} payload
+ */
+export function updateAdminUser(id, payload) {
+  return request(`/admin/users/${id}`, { method: 'PATCH', body: JSON.stringify(payload) })
+}
+
+/**
+ * Aggregate ledger telemetry, bucketed by day or ISO week.
+ * @param {{ granularity?: 'day'|'week', window?: '30d'|'90d' }} [query]
+ */
+export function fetchAdminAnalytics(query) {
+  return request(`/admin/analytics${toQuery(query)}`)
+}
+
+/**
+ * @param {object} [query] `{ action, actorEmail, targetType, targetId, page, limit }`
+ */
+export function fetchAdminAudit(query) {
+  return request(`/admin/audit${toQuery(query)}`)
+}
+
+/** Full taxonomy, including disabled and system rows. */
+export function fetchAdminCategories() {
+  return request('/admin/categories')
+}
+
+/** @param {object} payload `{ key, label, icon, accent, kind, status, sortOrder, reason }` */
+export function createAdminCategory(payload) {
+  return request('/admin/categories', { method: 'POST', body: JSON.stringify(payload) })
+}
+
+/** @param {string} key @param {object} payload */
+export function updateAdminCategory(key, payload) {
+  return request(`/admin/categories/${encodeURIComponent(key)}`, {
+    method: 'PUT',
+    body: JSON.stringify(payload),
+  })
+}
+
+/** Currency, rail aggregates, exposure limits, credential and runtime posture. */
+export function fetchAdminSettings() {
+  return request('/admin/settings')
+}
+
+/** Credential metadata only — never the secret. */
+export function fetchAdminCredentials() {
+  return request('/admin/credentials')
+}
+
+/**
+ * Rotates the webhook-signing secret. Returns the plaintext exactly once.
+ * @param {{ reason: string }} payload
+ */
+export function rotateAdminCredential(payload) {
+  return request('/admin/credentials', { method: 'PUT', body: JSON.stringify(payload) })
+}
+
+// ------------------------------------------------------------------------- auth
 /** @param {{ email: string, password: string }} credentials */
 export function login(credentials) {
   return request('/auth/login', { method: 'POST', body: JSON.stringify(credentials) })

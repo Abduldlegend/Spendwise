@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
 import { beforeAll, afterAll, afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { AuthProvider } from '../context/AuthContext'
+import { CategoriesProvider } from '../context/CategoriesContext'
 import { DataProvider, useData } from '../context/DataContext'
 import { ThemeProvider } from '../context/ThemeContext'
 import { ToastProvider } from '../context/ToastContext'
@@ -97,15 +98,17 @@ function renderApp() {
       <ThemeProvider>
         <ToastProvider>
           <AuthProvider>
-            <DataProvider>
-              <Probe />
-              <Routes>
-                <Route element={<AuthenticatedLayout />}>
-                  <Route path="/transactions" element={<TransactionsPage />} />
-                </Route>
-              </Routes>
-              <ToastViewport />
-            </DataProvider>
+            <CategoriesProvider>
+              <DataProvider>
+                <Probe />
+                <Routes>
+                  <Route element={<AuthenticatedLayout />}>
+                    <Route path="/transactions" element={<TransactionsPage />} />
+                  </Route>
+                </Routes>
+                <ToastViewport />
+              </DataProvider>
+            </CategoriesProvider>
           </AuthProvider>
         </ToastProvider>
       </ThemeProvider>

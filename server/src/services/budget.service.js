@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 
 import { Budget } from "../models/Budget.js";
+import { categoryService } from "./category.service.js";
 import { ApiError } from "../utils/ApiError.js";
 import { httpStatus } from "../constants/httpStatus.js";
 import { toCents } from "../utils/money.js";
@@ -51,6 +52,8 @@ export const budgetService = {
 
   /** The mock POST behaves as an upsert keyed on category (see DataContext.upsertBudget). */
   async create(accountId, body) {
+    await categoryService.assertUsable(body.category, { kind: "expense" });
+
     const existing = await Budget.findOne({ accountId, category: body.category });
     if (existing) {
       applyBody(existing, body);
@@ -66,6 +69,9 @@ export const budgetService = {
   async update(accountId, id, body) {
     const doc = await Budget.findOne({ _id: safeId(id), accountId });
     if (!doc) throw new ApiError(httpStatus.NOT_FOUND, "Budget not found");
+    if (body.category !== undefined) {
+      await categoryService.assertUsable(body.category, { kind: "expense" });
+    }
     applyBody(doc, body);
     await doc.save();
     return serializeBudget(doc);

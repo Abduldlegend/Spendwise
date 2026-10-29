@@ -16,11 +16,42 @@ export function serializeUser(user) {
     name: user.name,
     email: user.email,
     provider: user.provider,
+    role: user.role ?? "user",
     avatarUrl: user.avatarUrl ?? null,
     baseCurrency: user.baseCurrency,
     kycTier: user.kycTier,
     kycLimit: toAmount(user.kycLimitCents),
     createdAt: iso(user.createdAt),
+  };
+}
+
+export function serializeAuditLog(doc) {
+  return {
+    id: doc._id.toString(),
+    actorId: doc.actorId?.toString?.() ?? String(doc.actorId),
+    actorEmail: doc.actorEmail,
+    action: doc.action,
+    targetType: doc.targetType,
+    targetId: doc.targetId,
+    reason: doc.reason,
+    metadata: doc.metadata ?? {},
+    ip: doc.ip,
+    userAgent: doc.userAgent,
+    createdAt: iso(doc.createdAt),
+  };
+}
+
+export function serializeCategory(doc) {
+  return {
+    id: doc._id.toString(),
+    key: doc.key,
+    label: doc.label,
+    icon: doc.icon,
+    accent: doc.accent,
+    kind: doc.kind,
+    status: doc.status,
+    isSystem: doc.isSystem,
+    sortOrder: doc.sortOrder,
   };
 }
 

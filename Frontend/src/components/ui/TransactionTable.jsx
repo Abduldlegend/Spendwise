@@ -18,6 +18,7 @@ import { formatCurrency } from '../../utils/format'
  * @param {(row: object) => void} [props.onEdit]
  * @param {(row: object) => void} [props.onDelete]
  * @param {string[]} [props.pendingIds] rows awaiting server confirmation
+ * @param {Map<string, object>} [props.categoryMeta] runtime category records by key
  */
 export default function TransactionTable({
   rows,
@@ -28,6 +29,7 @@ export default function TransactionTable({
   onEdit,
   onDelete,
   pendingIds = [],
+  categoryMeta,
 }) {
   const isPending = (id) => pendingIds.includes(id)
 
@@ -97,7 +99,7 @@ export default function TransactionTable({
                 </td>
 
                 <td className="px-3 py-3">
-                  <CategoryBadge category={row.category} size="sm" />
+                  <CategoryBadge category={row.category} meta={categoryMeta?.get(row.category)} size="sm" />
                 </td>
 
                 <td className="whitespace-nowrap px-3 py-3 text-xs text-fg-muted">{row.railName}</td>
@@ -151,7 +153,7 @@ export default function TransactionTable({
               key={row.id}
               className={`flex items-start gap-3 py-3 ${pending ? 'opacity-60' : ''}`}
             >
-              <CategoryBadge category={row.category} size="sm" />
+              <CategoryBadge category={row.category} meta={categoryMeta?.get(row.category)} size="sm" />
 
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2">

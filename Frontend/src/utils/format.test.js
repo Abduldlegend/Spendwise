@@ -2,10 +2,29 @@ import { describe, expect, it } from 'vitest'
 import {
   formatAmount,
   formatCompact,
+  formatCount,
   formatCurrency,
   formatPercent,
   formatSignedAmount,
 } from './format'
+
+describe('formatCount', () => {
+  it('groups integer counts', () => {
+    expect(formatCount(12480)).toBe('12,480')
+  })
+
+  it('rounds fractional input', () => {
+    expect(formatCount(12.6)).toBe('13')
+  })
+
+  it('formats zero', () => {
+    expect(formatCount(0)).toBe('0')
+  })
+
+  it('returns an em dash for non-finite input', () => {
+    expect(formatCount(NaN)).toBe('—')
+  })
+})
 
 describe('formatAmount', () => {
   it('groups thousands and keeps 2 decimals', () => {

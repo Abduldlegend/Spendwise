@@ -1,5 +1,17 @@
 import { z } from "zod";
-import { CATEGORIES, CURRENCIES, TRANSACTION_TYPES } from "../constants/enums.js";
+import {
+  CATEGORY_KEY_PATTERN,
+  CURRENCIES,
+  TRANSACTION_TYPES,
+} from "../constants/enums.js";
+
+// Category keys are runtime data; the service enforces existence, status and
+// direction. The validator only guarantees a well-formed key.
+const categoryKey = z
+  .string()
+  .trim()
+  .toLowerCase()
+  .regex(CATEGORY_KEY_PATTERN, "Use lowercase letters, numbers or underscores");
 
 const bodyCreate = z.object({
   type: z.enum(TRANSACTION_TYPES),
@@ -8,7 +20,7 @@ const bodyCreate = z.object({
     .positive("Amount must be greater than zero")
     .multipleOf(0.01, "Amount cannot be more than 2 decimal places"),
   currency: z.enum(CURRENCIES).default("NGN"),
-  category: z.enum(CATEGORIES),
+  category: categoryKey,
   description: z.string().trim().min(2).max(120),
   note: z.string().trim().max(280).optional().or(z.literal("")),
   railId: z.string().min(1),
@@ -20,7 +32,7 @@ const bodyUpdate = z.object({
   type: z.enum(TRANSACTION_TYPES).optional(),
   amount: z.coerce.number().positive().multipleOf(0.01).optional(),
   currency: z.enum(CURRENCIES).optional(),
-  category: z.enum(CATEGORIES).optional(),
+  category: categoryKey.optional(),
   description: z.string().trim().min(2).max(120).optional(),
   note: z.string().trim().max(280).optional().or(z.literal("")),
   railId: z.string().min(1).optional(),
@@ -35,7 +47,7 @@ const query = z.object({
     .string()
     .regex(/^\d{6}$/, "cycle must look like YYYYMM")
     .optional(),
-  category: z.enum(CATEGORIES).optional(),
+  category: categoryKey.optional(),
 });
 
 export const transactionValidators = {

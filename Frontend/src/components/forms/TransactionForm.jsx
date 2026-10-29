@@ -1,7 +1,8 @@
+import { useEffect, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { transactionSchema } from '../../schemas/transaction'
-import { BUDGETABLE_CATEGORIES } from '../../schemas/enums'
+import { DEFAULT_CATEGORY_RECORDS } from '../../utils/categories'
 import { Button, Icon } from '../ui/Button'
 
 /**
@@ -16,6 +17,7 @@ import { Button, Icon } from '../ui/Button'
  * @param {(values: object) => Promise<void>} props.onSubmit
  * @param {object} [props.defaultValues] used when editing
  * @param {Array<object>} props.rails available payment rails
+ * @param {Array<object>} [props.categories] runtime categories from the page
  * @param {boolean} [props.isSubmitting]
  * @param {boolean} [props.isEditing]
  * @param {() => void} [props.onCancel]
@@ -24,22 +26,28 @@ export default function TransactionForm({
   onSubmit,
   defaultValues,
   rails = [],
+  categories = DEFAULT_CATEGORY_RECORDS,
   isSubmitting = false,
   isEditing = false,
   onCancel,
 }) {
+  const source = categories?.length ? categories : DEFAULT_CATEGORY_RECORDS
+  const fallbackCategory =
+    source.find((option) => option.kind === 'expense' && option.status !== 'disabled')?.key ?? 'food'
+
   const {
     register,
     handleSubmit,
     watch,
     reset,
+    setValue,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(transactionSchema),
     defaultValues: {
       type: 'expense',
       amount: '',
-      category: 'food',
+      category: fallbackCategory,
       description: '',
       note: '',
       railId: rails[0]?.id ?? '',
@@ -49,10 +57,29 @@ export default function TransactionForm({
   })
 
   // React Compiler cannot memoise RHF's `watch`, so the compiler skips this
-  // component. That is preferable to mirroring `type` into a second piece of
+  // component. That is preferable to mirroring `type`/`category` into further
   // state, which is exactly the duplication AGENTS.md forbids.
   // eslint-disable-next-line react-hooks/incompatible-library
   const type = watch('type')
+  const category = watch('category')
+
+  // Only categories matching the direction are offered; an envelope/row already
+  // using a now-disabled category keeps it selectable so editing stays lossless.
+  const visibleCategories = useMemo(() => {
+    const matching = source.filter((option) => option.kind === type)
+    const offered = matching.filter((option) => option.status !== 'disabled')
+    if (category && !offered.some((option) => option.key === category)) {
+      const current = matching.find((option) => option.key === category)
+      if (current) offered.push(current)
+    }
+    return offered.length > 0 ? offered : DEFAULT_CATEGORY_RECORDS.filter((option) => option.kind === type)
+  }, [source, type, category])
+
+  useEffect(() => {
+    if (!visibleCategories.some((option) => option.key === category)) {
+      setValue('category', visibleCategories[0]?.key ?? '')
+    }
+  }, [visibleCategories, category, setValue])
 
   const submit = async (values) => {
     await onSubmit(values)
@@ -92,10 +119,9 @@ export default function TransactionForm({
 
       <Field label="Category" error={errors.category?.message}>
         <select className={inputClass(errors.category)} {...register('category')}>
-          {type === 'income' && <option value="income">Income / Wire</option>}
-          {BUDGETABLE_CATEGORIES.map((category) => (
-            <option key={category} value={category}>
-              {category}
+          {visibleCategories.map((option) => (
+            <option key={option.key} value={option.key}>
+              {option.label}
             </option>
           ))}
         </select>

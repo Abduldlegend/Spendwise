@@ -16,7 +16,7 @@ function normalizeEmail(email) {
 }
 
 /** Ensures the user has their one account (single account per user). */
-async function ensureAccount(user) {
+export async function ensureAccount(user) {
   const existing = await Account.findOne({ userId: user._id });
   if (existing) return existing;
   return Account.create({
@@ -29,7 +29,12 @@ async function ensureAccount(user) {
 }
 
 function buildTokens(user, account) {
-  const payload = { sub: user._id.toString(), aid: account._id.toString(), email: user.email };
+  const payload = {
+    sub: user._id.toString(),
+    aid: account._id.toString(),
+    email: user.email,
+    role: user.role ?? "user",
+  };
   return {
     accessToken: signAccessToken(payload),
     refreshToken: signRefreshToken({ sub: payload.sub, aid: payload.aid }),

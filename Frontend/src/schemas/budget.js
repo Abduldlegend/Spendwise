@@ -1,11 +1,12 @@
 import { z } from 'zod'
-import { BUDGETABLE_CATEGORIES, CATEGORY_SCHEMA, CURRENCY_SCHEMA } from './enums'
+import { CATEGORY_SCHEMA, CURRENCY_SCHEMA } from './enums'
 
 /**
  * Budget envelope resource.
  *
- * `category` is validated against `BUDGETABLE_CATEGORIES` (not the full
- * category list) so an income transaction can never be given a spending cap.
+ * `category` is shape-validated here; the API rejects income-kind and disabled
+ * categories. `income` is also blocked locally because it is the seeded inflow
+ * key and the form never offers it.
  */
 const policySchema = z.object({
   autoSweep: z.object({
@@ -21,7 +22,7 @@ const policySchema = z.object({
 
 export const budgetSchema = z
   .object({
-    category: z.enum(BUDGETABLE_CATEGORIES),
+    category: CATEGORY_SCHEMA.refine((value) => value !== 'income', 'Income cannot be budgeted'),
     allocated: z.coerce
       .number({ message: 'Enter an allocation' })
       .positive('Allocation must be greater than zero')

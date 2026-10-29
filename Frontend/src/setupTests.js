@@ -3,6 +3,16 @@ import { cleanup } from '@testing-library/react'
 import { afterEach, vi } from 'vitest'
 import { webcrypto } from 'node:crypto'
 
+// Tests are hermetic: force the MSW mock even when `.env.local` points the app
+// at a locally running server for manual E2E work.
+vi.mock('./config', () => ({
+  VITE_GOOGLE_CLIENT_ID: '',
+  isGoogleAuthEnabled: false,
+  VITE_API_BASE_URL: '',
+  API_BASE_URL: '/api',
+  isMockApiEnabled: true,
+}))
+
 afterEach(() => {
   cleanup()
 })

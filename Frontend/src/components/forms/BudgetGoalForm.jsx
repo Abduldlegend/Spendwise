@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { budgetSchema } from '../../schemas/budget'
-import { BUDGETABLE_CATEGORIES } from '../../schemas/enums'
+import { DEFAULT_EXPENSE_CATEGORIES } from '../../utils/categories'
 import { Button } from '../ui/Button'
 
 /**
@@ -13,11 +13,24 @@ import { Button } from '../ui/Button'
  * @param {object} props
  * @param {(values: object) => Promise<void>} props.onSubmit
  * @param {object} [props.existing] envelope being edited, for default values
+ * @param {Array<object>} [props.categories] runtime categories from the page
  * @param {boolean} [props.isSubmitting]
  * @param {string} [props.cycle]
  * @param {() => void} [props.onCancel]
  */
-export default function BudgetGoalForm({ onSubmit, existing, isSubmitting = false, onCancel }) {
+export default function BudgetGoalForm({
+  onSubmit,
+  existing,
+  categories = DEFAULT_EXPENSE_CATEGORIES,
+  isSubmitting = false,
+  onCancel,
+}) {
+  const source = categories?.length ? categories : DEFAULT_EXPENSE_CATEGORIES
+  const options = source.filter(
+    (option) => option.kind === 'expense' && (option.status !== 'disabled' || option.key === existing?.category),
+  )
+  const fallbackCategory = existing?.category ?? options[0]?.key ?? 'food'
+
   const {
     register,
     handleSubmit,
@@ -33,7 +46,7 @@ export default function BudgetGoalForm({ onSubmit, existing, isSubmitting = fals
           policy: existing.policy,
         }
       : {
-          category: 'food',
+          category: fallbackCategory,
           allocated: '',
           cadence: 'monthly',
           isLocked: false,
@@ -50,9 +63,9 @@ export default function BudgetGoalForm({ onSubmit, existing, isSubmitting = fals
           className={inputClass(errors.category)}
           {...register('category')}
         >
-          {BUDGETABLE_CATEGORIES.map((category) => (
-            <option key={category} value={category}>
-              {category}
+          {options.map((option) => (
+            <option key={option.key} value={option.key}>
+              {option.label}
             </option>
           ))}
         </select>

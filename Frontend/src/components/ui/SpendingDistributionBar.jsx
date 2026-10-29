@@ -15,6 +15,7 @@ import { formatCompact } from '../../utils/format'
  * @param {(category: string) => void} [props.onSelect]
  * @param {boolean} [props.withLegend=false]
  * @param {string} [props.totalLabel]
+ * @param {Map<string, object>} [props.categoryMeta] runtime category records by key
  */
 export default function SpendingDistributionBar({
   segments = [],
@@ -22,8 +23,10 @@ export default function SpendingDistributionBar({
   onSelect,
   withLegend = false,
   totalLabel,
+  categoryMeta,
 }) {
   const total = segments.reduce((sum, segment) => sum + segment.amount, 0)
+  const metaFor = (key) => categoryMeta?.get(key)
 
   if (segments.length === 0) {
     return (
@@ -38,8 +41,9 @@ export default function SpendingDistributionBar({
     <div className="flex flex-col gap-3">
       <div className="flex h-3 w-full gap-0.5 overflow-hidden rounded-full bg-track">
         {segments.map((segment) => {
-          const role = CATEGORY_ACCENTS[segment.category] ?? 'neutral-muted'
-          const accent = ACCENT_CLASSES[role]
+          const role = metaFor(segment.category)?.accent ?? CATEGORY_ACCENTS[segment.category] ?? 'neutral-muted'
+          const accent = ACCENT_CLASSES[role] ?? ACCENT_CLASSES['neutral-muted']
+          const label = metaFor(segment.category)?.label ?? segment.category
           const isInteractive = Boolean(onSelect)
 
           const content = (
@@ -64,7 +68,7 @@ export default function SpendingDistributionBar({
               type="button"
               onClick={() => onSelect(segment.category)}
               className="group h-full"
-              title={`${segment.category}: ${formatCompact(segment.amount, currency)}`}
+              title={`${label}: ${formatCompact(segment.amount, currency)}`}
             >
               {content}
             </button>
@@ -75,12 +79,13 @@ export default function SpendingDistributionBar({
       {withLegend && (
         <ul className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:gap-x-4 sm:gap-y-2">
           {segments.map((segment) => {
-            const role = CATEGORY_ACCENTS[segment.category] ?? 'neutral-muted'
-            const accent = ACCENT_CLASSES[role]
+            const role = metaFor(segment.category)?.accent ?? CATEGORY_ACCENTS[segment.category] ?? 'neutral-muted'
+            const accent = ACCENT_CLASSES[role] ?? ACCENT_CLASSES['neutral-muted']
+            const label = metaFor(segment.category)?.label ?? segment.category
             return (
               <li key={segment.category} className="flex items-center gap-2 text-xs">
                 <span aria-hidden="true" className={`size-2 shrink-0 rounded-full ${accent.dot}`} />
-                <span className="min-w-0 truncate text-fg-muted capitalize">{segment.category}</span>
+                <span className="min-w-0 truncate text-fg-muted">{label}</span>
                 <span className="ml-auto shrink-0 font-semibold tabular-nums text-fg sm:ml-0">
                   {formatCompact(segment.amount, currency)}
                 </span>

@@ -8,6 +8,7 @@ import TransactionTable from '../components/ui/TransactionTable'
 import TransactionForm from '../components/forms/TransactionForm'
 import PageContainer from '../components/layout/PageContainer'
 import { Button } from '../components/ui/Button'
+import { useCategories } from '../context/CategoriesContext'
 import { useData } from '../context/DataContext'
 import { selectTransactions } from '../utils/derived'
 import { cycleKey, getPeriodLabel } from '../utils/cycle'
@@ -31,6 +32,7 @@ export default function TransactionsPage() {
     editTransaction,
     removeTransaction,
   } = useData()
+  const { categories: categoryRecords, byKey } = useCategories()
 
   const cycle = cycleKey()
 
@@ -144,6 +146,7 @@ export default function TransactionsPage() {
             onTypeChange={setType}
             categories={categories}
             onCategoriesChange={setCategories}
+            options={categoryRecords.filter((category) => category.kind === 'expense')}
           />
 
           {isLoading && transactions.length === 0 ? (
@@ -166,6 +169,7 @@ export default function TransactionsPage() {
               onEdit={openEdit}
               onDelete={setConfirmDelete}
               pendingIds={pendingIds}
+              categoryMeta={byKey}
             />
           )}
         </div>
@@ -184,6 +188,7 @@ export default function TransactionsPage() {
         <TransactionForm
           onSubmit={handleSubmit}
           rails={rails}
+          categories={categoryRecords}
           isSubmitting={submitting}
           isEditing={Boolean(editing)}
           onCancel={() => {

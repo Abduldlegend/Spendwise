@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 import { Transaction } from "../models/Transaction.js";
 import { Rail } from "../models/Rail.js";
+import { categoryService } from "./category.service.js";
 import { ApiError } from "../utils/ApiError.js";
 import { httpStatus } from "../constants/httpStatus.js";
 import { toCents } from "../utils/money.js";
@@ -31,6 +32,8 @@ export const transactionService = {
   },
 
   async create(accountId, body) {
+    await categoryService.assertUsable(body.category, { kind: body.type });
+
     const doc = await Transaction.create({
       accountId,
       type: body.type,
@@ -49,6 +52,14 @@ export const transactionService = {
   async update(accountId, id, body) {
     const doc = await Transaction.findOne({ _id: safeId(id), accountId });
     if (!doc) throw new ApiError(httpStatus.NOT_FOUND, "Transaction not found");
+
+    // Re-check the pair only when the direction actually changes. Editing a row
+    // that points at a since-disabled category must stay possible.
+    const nextType = body.type ?? doc.type;
+    const nextCategory = body.category ?? doc.category;
+    if (nextType !== doc.type || nextCategory !== doc.category) {
+      await categoryService.assertUsable(nextCategory, { kind: nextType });
+    }
 
     if (body.type !== undefined) doc.type = body.type;
     if (body.amount !== undefined) doc.amountCents = toCents(body.amount);

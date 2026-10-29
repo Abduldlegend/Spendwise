@@ -86,7 +86,18 @@ export function AuthProvider({ children }) {
   }, [applySession])
 
   const value = useMemo(
-    () => ({ user, token, status, error, signIn, signUp, signInWithGoogle, signOut, isAuthenticated: Boolean(user) }),
+    () => ({
+      user,
+      token,
+      status,
+      error,
+      signIn,
+      signUp,
+      signInWithGoogle,
+      signOut,
+      isAuthenticated: Boolean(user),
+      isAdmin: user?.role === 'admin',
+    }),
     [user, token, status, error, signIn, signUp, signInWithGoogle, signOut],
   )
 

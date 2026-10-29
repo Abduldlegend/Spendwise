@@ -1,9 +1,17 @@
 import app from "./app.js";
 import config from "./config/env.js";
 import { connectDB, disconnectDB } from "./config/db.js";
+import { seedCategories } from "./seeds/categories.js";
 
 async function start() {
   await connectDB();
+
+  try {
+    const { created } = await seedCategories();
+    if (created > 0) console.log(`[api] seeded ${created} default categories`);
+  } catch (error) {
+    console.warn("[api] category seed skipped:", error.message);
+  }
 
   const server = app.listen(config.port, () => {
     console.log(`[api] listening on http://localhost:${config.port}${config.apiPrefix}`);

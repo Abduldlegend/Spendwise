@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { CURRENCIES, KYC_TIERS, PROVIDERS } from "../constants/enums.js";
+import { CURRENCIES, KYC_TIERS, PROVIDERS, USER_ROLES } from "../constants/enums.js";
 
 const userSchema = new mongoose.Schema(
   {
@@ -13,6 +13,7 @@ const userSchema = new mongoose.Schema(
     },
     passwordHash: { type: String, select: false },
     provider: { type: String, enum: PROVIDERS, default: "password", required: true },
+    role: { type: String, enum: USER_ROLES, default: "user", required: true, index: true },
     avatarUrl: { type: String, default: null },
     baseCurrency: { type: String, enum: CURRENCIES, default: "NGN" },
     kycTier: { type: Number, enum: KYC_TIERS, default: 1 },

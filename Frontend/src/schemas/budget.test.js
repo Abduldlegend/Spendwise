@@ -41,7 +41,15 @@ describe('budgetSchema', () => {
     expect(result.success).toBe(false)
   })
 
-  it('accepts every budgetable category', () => {
+  it('rejects a malformed category key', () => {
+    expect(budgetSchema.safeParse({ ...valid, category: 'Not A Key' }).success).toBe(false)
+  })
+
+  it('accepts a custom expense key; the API checks its direction', () => {
+    expect(budgetSchema.safeParse({ ...valid, category: 'crypto' }).success).toBe(true)
+  })
+
+  it('accepts every seeded budgetable category', () => {
     for (const category of [
       'housing',
       'food',

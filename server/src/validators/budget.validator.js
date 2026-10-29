@@ -1,5 +1,12 @@
 import { z } from "zod";
-import { BUDGETABLE_CATEGORIES, CURRENCIES } from "../constants/enums.js";
+import { CATEGORY_KEY_PATTERN, CURRENCIES } from "../constants/enums.js";
+
+// Existence and direction (expense-only) are enforced by the budget service.
+const categoryKey = z
+  .string()
+  .trim()
+  .toLowerCase()
+  .regex(CATEGORY_KEY_PATTERN, "Use lowercase letters, numbers or underscores");
 
 const policy = z.object({
   autoSweep: z
@@ -13,7 +20,7 @@ const policy = z.object({
 
 const bodyCreate = z
   .object({
-    category: z.enum(BUDGETABLE_CATEGORIES),
+    category: categoryKey,
     allocated: z.coerce
       .number()
       .positive("Allocation must be greater than zero")
@@ -29,7 +36,7 @@ const bodyCreate = z
   });
 
 const bodyUpdate = z.object({
-  category: z.enum(BUDGETABLE_CATEGORIES).optional(),
+  category: categoryKey.optional(),
   allocated: z.coerce.number().positive().multipleOf(0.01).optional(),
   currency: z.enum(CURRENCIES).optional(),
   cadence: z.literal("monthly").optional(),

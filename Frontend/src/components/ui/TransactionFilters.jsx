@@ -1,5 +1,4 @@
-import { CATEGORIES } from '../../schemas/enums'
-import { getCategoryLabel } from '../../utils/categories'
+import { DEFAULT_EXPENSE_CATEGORIES } from '../../utils/categories'
 import { Icon } from './Button'
 
 /**
@@ -15,6 +14,7 @@ import { Icon } from './Button'
  * @param {(value: 'all'|'income'|'expense') => void} props.onTypeChange
  * @param {string[]} props.categories selected category filters
  * @param {(categories: string[]) => void} props.onCategoriesChange
+ * @param {Array<object>} [props.options] runtime categories to offer as chips
  * @param {string} [props.resultCount]
  */
 export default function TransactionFilters({
@@ -24,6 +24,7 @@ export default function TransactionFilters({
   onTypeChange,
   categories,
   onCategoriesChange,
+  options = DEFAULT_EXPENSE_CATEGORIES,
   resultCount,
 }) {
   const toggleCategory = (category) => {
@@ -69,13 +70,13 @@ export default function TransactionFilters({
       </div>
 
       <div className="flex flex-wrap items-center gap-1.5">
-        {CATEGORIES.filter((category) => category !== 'income').map((category) => {
-          const active = categories.includes(category)
+        {options.map((option) => {
+          const active = categories.includes(option.key)
           return (
             <button
-              key={category}
+              key={option.key}
               type="button"
-              onClick={() => toggleCategory(category)}
+              onClick={() => toggleCategory(option.key)}
               aria-pressed={active}
               className={`rounded-lg border px-2.5 py-1 text-xs font-medium transition-colors ${
                 active
@@ -83,7 +84,7 @@ export default function TransactionFilters({
                   : 'border-hairline text-fg-muted hover:border-hairline-strong hover:text-fg'
               }`}
             >
-              {getCategoryLabel(category)}
+              {option.label}
             </button>
           )
         })}

@@ -1,10 +1,11 @@
+import { CATEGORIES } from '../schemas/enums'
+
 /**
  * Per-category presentation metadata.
  *
  * The accent ramp and Material Symbols glyphs are design data lifted from the
- * Stitch reference export. Keeping them beside the enum (rather than inside a
- * component) is what lets the spend bar, the ledger rows, the budget cards and
- * the filter chips all render the same category identically.
+ * Stitch reference export. They are the fallback for the seeded taxonomy; custom
+ * categories carry their own label/icon/accent from the API.
  */
 
 export const CATEGORY_ACCENTS = {
@@ -70,6 +71,37 @@ export const ACCENT_CLASSES = {
   positive: { dot: 'bg-positive', text: 'text-positive-fg', tile: 'bg-positive-subtle' },
   warning: { dot: 'bg-warning', text: 'text-warning-fg', tile: 'bg-warning-subtle' },
   negative: { dot: 'bg-negative', text: 'text-negative-fg', tile: 'bg-negative-subtle' },
+}
+
+/**
+ * Seeded taxonomy in display order.
+ *
+ * The source of truth is the `Category` collection; these records are the
+ * offline/fallback shape used before `GET /categories` resolves, in MSW mode, and
+ * by presentational components when they are rendered without Context.
+ */
+export const DEFAULT_CATEGORY_RECORDS = CATEGORIES.map((key, index) => ({
+  id: `cat_${key}`,
+  key,
+  label: CATEGORY_LABELS[key] ?? key,
+  icon: CATEGORY_ICONS[key] ?? 'category',
+  accent: CATEGORY_ACCENTS[key] ?? 'neutral-muted',
+  kind: key === 'income' ? 'income' : 'expense',
+  status: 'enabled',
+  isSystem: true,
+  sortOrder: index * 10,
+}))
+
+export const DEFAULT_EXPENSE_CATEGORIES = DEFAULT_CATEGORY_RECORDS.filter(
+  (category) => category.kind === 'expense',
+)
+
+/**
+ * @param {Array<object>} categories
+ * @returns {Map<string, object>} key -> category record
+ */
+export function indexCategories(categories = []) {
+  return new Map(categories.map((category) => [category.key, category]))
 }
 
 /** @param {string} category */

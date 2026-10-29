@@ -38,12 +38,16 @@ describe('transactionSchema', () => {
     expect(result.error.issues[0].message).toMatch(/2 decimal places/i)
   })
 
-  it('rejects an unknown category (prevents orphan categories)', () => {
-    const result = transactionSchema.safeParse({ ...valid, category: 'crypto' })
-    expect(result.success).toBe(false)
+  it('rejects a malformed category key', () => {
+    expect(transactionSchema.safeParse({ ...valid, category: 'not a key' }).success).toBe(false)
+    expect(transactionSchema.safeParse({ ...valid, category: '' }).success).toBe(false)
   })
 
-  it('accepts every canonical category', () => {
+  it('accepts a custom category key, since the taxonomy is runtime data', () => {
+    expect(transactionSchema.safeParse({ ...valid, category: 'crypto' }).success).toBe(true)
+  })
+
+  it('accepts every seeded category', () => {
     for (const category of [
       'income',
       'housing',

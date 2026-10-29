@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { BUDGETABLE_CATEGORIES, CURRENCIES } from "../constants/enums.js";
+import { CATEGORY_KEY_PATTERN, CURRENCIES } from "../constants/enums.js";
 
 const policySchema = new mongoose.Schema(
   {
@@ -20,7 +20,7 @@ const budgetSchema = new mongoose.Schema(
       required: true,
       index: true,
     },
-    category: { type: String, enum: BUDGETABLE_CATEGORIES, required: true },
+    category: { type: String, match: CATEGORY_KEY_PATTERN, required: true },
     allocatedCents: { type: Number, required: true, min: 1 },
     currency: { type: String, enum: CURRENCIES, default: "NGN", required: true },
     cadence: { type: String, enum: ["monthly"], default: "monthly", required: true },

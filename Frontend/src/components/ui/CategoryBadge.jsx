@@ -12,16 +12,18 @@ import {
  * Context. Used by the ledger rows, budget cards, spend bar and form previews.
  *
  * @param {object} props
- * @param {string} props.category canonical category from `schemas/enums`
+ * @param {string} props.category category key
+ * @param {{ label: string, icon: string, accent: string }} [props.meta] runtime
+ *   category record from the API; falls back to the seeded display metadata
  * @param {'sm'|'md'|'lg'} [props.size='md']
  * @param {boolean} [props.showLabel=true]
  * @param {boolean} [props.tile=true]
  */
-export default function CategoryBadge({ category, size = 'md', showLabel = true, tile = true }) {
-  const role = CATEGORY_ACCENTS[category] ?? 'neutral-muted'
-  const accent = ACCENT_CLASSES[role]
-  const icon = getCategoryIcon(category)
-  const label = getCategoryLabel(category)
+export default function CategoryBadge({ category, meta, size = 'md', showLabel = true, tile = true }) {
+  const role = meta?.accent ?? CATEGORY_ACCENTS[category] ?? 'neutral-muted'
+  const accent = ACCENT_CLASSES[role] ?? ACCENT_CLASSES['neutral-muted']
+  const icon = meta?.icon ?? getCategoryIcon(category)
+  const label = meta?.label ?? getCategoryLabel(category)
 
   const sizes = {
     sm: { tile: 'size-7 rounded-lg', icon: 'text-[15px]', label: 'text-xs' },

@@ -9,6 +9,7 @@ import Skeleton from '../components/ui/Skeleton'
 import BudgetGoalForm from '../components/forms/BudgetGoalForm'
 import PageContainer from '../components/layout/PageContainer'
 import { Icon } from '../components/ui/Button'
+import { useCategories } from '../context/CategoriesContext'
 import { useData } from '../context/DataContext'
 import { BUDGET_THRESHOLDS } from '../utils/derived'
 import { formatCompact, formatCurrency, formatPercent } from '../utils/format'
@@ -29,6 +30,7 @@ const STATE_META = {
  */
 export default function BudgetsPage() {
   const { budgets, currency, cycle, isLoading, sweep, upsertBudget, setBudgetLock } = useData()
+  const { categories, byKey } = useCategories()
 
   const [editing, setEditing] = useState(null)
   const [submitting, setSubmitting] = useState(false)
@@ -93,7 +95,7 @@ export default function BudgetsPage() {
               <li key={budget.id}>
                 <Card className="h-full">
                   <div className="flex items-start justify-between gap-3">
-                    <CategoryBadge category={budget.category} />
+                    <CategoryBadge category={budget.category} meta={byKey.get(budget.category)} />
                     <span className={`rounded-lg px-2 py-0.5 text-xs font-semibold ${meta.chip}`}>
                       {meta.label}
                     </span>
@@ -176,11 +178,16 @@ export default function BudgetsPage() {
       <Modal
         open={Boolean(editing)}
         onClose={() => setEditing(null)}
-        title={editing?.isNew || !editing ? 'New envelope' : `Edit ${editing.category}`}
+        title={
+          editing?.isNew || !editing
+            ? 'New envelope'
+            : `Edit ${byKey.get(editing.category)?.label ?? editing.category}`
+        }
         description="Allocation is per month and resets each cycle."
       >
         <BudgetGoalForm
           onSubmit={handleSubmit}
+          categories={categories}
           isSubmitting={submitting}
           existing={editing?.isNew ? undefined : editing}
           cycle={cycle}

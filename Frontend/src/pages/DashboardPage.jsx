@@ -8,6 +8,7 @@ import RailsMenu from '../components/ui/RailsMenu'
 import Skeleton from '../components/ui/Skeleton'
 import SpendingDistributionBar from '../components/ui/SpendingDistributionBar'
 import PageContainer from '../components/layout/PageContainer'
+import { useCategories } from '../context/CategoriesContext'
 import { useData } from '../context/DataContext'
 import { cycleKey } from '../utils/cycle'
 import { getMilestoneProgress, getTransactionsForCycle } from '../utils/derived'
@@ -34,6 +35,8 @@ export default function DashboardPage() {
     sweep,
     rails,
   } = useData()
+  const { byKey } = useCategories()
+  const labelFor = (key) => byKey.get(key)?.label ?? key
 
   // Quick actions live in the header from `lg` up; below that the layout hands
   // them down so they can sit inside the Net balance card instead.
@@ -112,7 +115,7 @@ export default function DashboardPage() {
         <MetricCard
           label="Envelopes at risk"
           value={String(policyAlerts.length)}
-          hint={policyAlerts.length > 0 ? policyAlerts[0].category : 'all within budget'}
+          hint={policyAlerts.length > 0 ? labelFor(policyAlerts[0].category) : 'all within budget'}
           icon="warning"
           tone={policyAlerts.length > 0 ? 'accent' : 'default'}
         />
@@ -134,6 +137,7 @@ export default function DashboardPage() {
             currency={currency}
             withLegend
             totalLabel="Total spend"
+            categoryMeta={byKey}
           />
         </Card>
 
@@ -155,7 +159,7 @@ export default function DashboardPage() {
               value={
                 policyAlerts.length === 0
                   ? 'None this cycle'
-                  : policyAlerts.map((alert) => alert.category).join(', ')
+                  : policyAlerts.map((alert) => labelFor(alert.category)).join(', ')
               }
               tone={policyAlerts.length === 0 ? 'positive' : 'negative'}
             />
@@ -197,11 +201,16 @@ export default function DashboardPage() {
             <ul className="flex flex-col divide-y divide-hairline-soft">
               {recent.map((row) => (
                 <li key={row.id} className="flex items-center gap-3 py-3">
-                  <CategoryBadge category={row.category} size="sm" showLabel={false} />
+                  <CategoryBadge
+                    category={row.category}
+                    meta={byKey.get(row.category)}
+                    size="sm"
+                    showLabel={false}
+                  />
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-sm font-medium text-fg">{row.description}</p>
                     <p className="truncate text-xs text-fg-muted">
-                      <span className="capitalize">{row.category}</span> · {row.railName}
+                      {labelFor(row.category)} · {row.railName}
                     </p>
                   </div>
                   <span
@@ -223,7 +232,7 @@ export default function DashboardPage() {
             {topEnvelopes.map((budget) => (
               <li key={budget.id}>
                 <div className="mb-1.5 flex items-baseline justify-between gap-3">
-                  <span className="truncate text-sm font-medium text-fg capitalize">{budget.category}</span>
+                  <span className="truncate text-sm font-medium text-fg">{labelFor(budget.category)}</span>
                   <span className="shrink-0 text-xs font-semibold tabular-nums text-fg-muted">
                     {formatPercent(budget.progress.ratio, { showSign: false })}
                   </span>
@@ -232,7 +241,7 @@ export default function DashboardPage() {
                   ratio={budget.progress.ratio}
                   state={budget.state}
                   over={budget.progress.over}
-                  label={`${budget.category} budget used`}
+                  label={`${labelFor(budget.category)} budget used`}
                 />
                 <p className="mt-1.5 text-xs text-fg-muted">
                   {formatCompact(budget.progress.spent, currency)} of{' '}

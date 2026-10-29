@@ -1,5 +1,6 @@
 import { http, HttpResponse } from 'msw'
 import { MAX_RAILS } from '../schemas/enums'
+import { DEFAULT_CATEGORY_RECORDS } from '../utils/categories'
 import { cycleKey } from '../utils/cycle'
 import { delay, getUserData, nextId, persistDb, resetDb } from './db'
 import {
@@ -47,6 +48,12 @@ function unauthenticated() {
 }
 
 export const handlers = [
+  // ------------------------------------------------------------------ categories
+  http.get('/api/categories', async () => {
+    await delay(80)
+    return HttpResponse.json(structuredClone(DEFAULT_CATEGORY_RECORDS))
+  }),
+
   // ---------------------------------------------------------------- transactions
   http.get('/api/transactions', async ({ request }) => {
     await delay()

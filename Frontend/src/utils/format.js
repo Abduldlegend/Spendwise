@@ -28,6 +28,15 @@ export function formatAmount(value) {
 
 /**
  * @param {number} value
+ * @returns {string} integer count with comma grouping, e.g. '12,480'
+ */
+export function formatCount(value) {
+  if (!Number.isFinite(value)) return '—'
+  return groupThousands(String(Math.round(value)))
+}
+
+/**
+ * @param {number} value
  * @param {string} currency ISO code, e.g. 'NGN'
  * @returns {string} e.g. '₦1,250,000.00'
  */
